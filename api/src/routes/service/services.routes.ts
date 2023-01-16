@@ -8,7 +8,7 @@ import {
 } from '@middlewares/serviceValidation'
 import { serviceController } from '@controllers/service/ServiceController'
 
-const serviceRoutes: Router = Router()
+const serviceRoutes = Router() as Router
 
 serviceRoutes.use(authGuard)
 
