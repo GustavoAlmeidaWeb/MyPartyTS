@@ -9,6 +9,7 @@ export const createPartyUseCase = async ({
   budget,
   image,
   services,
+  user_id,
 }: ICreateParty): Promise<Response | any> => {
   if (services && !checkPartyBudget(budget, services)) {
     return {
@@ -29,6 +30,7 @@ export const createPartyUseCase = async ({
       budget,
       image,
       services,
+      user_id,
     })
 
     return { status: 201, json: party }

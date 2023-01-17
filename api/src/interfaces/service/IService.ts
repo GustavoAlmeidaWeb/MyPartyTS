@@ -1,8 +1,15 @@
+import { Types } from 'mongoose'
+
 export interface ICreateService {
+  user_id: Types.ObjectId
   name: string
   description: string
   price: number
   image?: string
+}
+
+export interface IUpdateService extends ICreateService {
+  id: string
 }
 
 export interface IPaginateParams {
@@ -16,12 +23,4 @@ export interface IServicesPaginateProperties {
   total: number
   current_page: number
   data: ICreateService[]
-}
-
-export interface IUpdateService {
-  id: string
-  name: string
-  description: string
-  price: number
-  image: string
 }

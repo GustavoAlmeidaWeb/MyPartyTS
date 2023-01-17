@@ -1,12 +1,12 @@
+import path from 'node:path'
 import express, { Express } from 'express'
 import dotenv from 'dotenv'
-import path from 'path'
 import cors from 'cors'
 import router from '@routes/Router'
 import { database } from '@db/conn'
 
 dotenv.config()
-const app: Express = express()
+const app = express() as Express
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

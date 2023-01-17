@@ -1,13 +1,22 @@
+import { IDeleteParty } from '@interfaces/party/IParty'
 import { PartyModel } from '@models/Party/Party'
 
-export const deletePartyUseCase = async (
-  id: string,
-): Promise<Response | any> => {
+export const deletePartyUseCase = async ({
+  user_id,
+  id,
+}: IDeleteParty): Promise<Response | any> => {
   try {
     const party = await PartyModel.findById(id)
 
     if (!party) {
       return { status: 404, json: { errors: ['Festa não encontrada.'] } }
+    }
+
+    if (!party.user_id.equals(user_id)) {
+      return {
+        status: 401,
+        json: { errors: ['Você não tem permissão para executar essa ação.'] },
+      }
     }
 
     await PartyModel.findByIdAndDelete(id)

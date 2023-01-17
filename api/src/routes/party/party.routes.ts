@@ -17,6 +17,7 @@ partyRoutes.post(
   partyController.create,
 )
 partyRoutes.delete('/:id', partyController.delete)
+partyRoutes.put('/:id', partyController.update)
 partyRoutes.get('/:id', partyController.find)
 partyRoutes.get('/', partyController.findAll)
 

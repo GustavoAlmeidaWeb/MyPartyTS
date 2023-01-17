@@ -1,18 +1,25 @@
+import {
+  ICreateParty,
+  IDeleteParty,
+  IUpdateParty,
+} from '@interfaces/party/IParty'
 import { Request, Response } from 'express'
 import { createPartyUseCase } from './CreatePartyUseCase'
 import { deletePartyUseCase } from './DeletePartyUseCase'
 import { findAllPartiesUseCase } from './FindAllPartiesUseCase'
 import { findPartyUseCase } from './FindPartyUseCase'
+import { updatePartyUseCase } from './UpdatePartyUseCase'
 
 export const partyController = {
   create: async (req: Request, res: Response): Promise<Response> => {
-    const data = ({
+    const data = {
       title: req.body.title,
       author: req.body.author,
       description: req.body.description,
       budget: req.body.budget,
       services: req.body.services,
-    } = req.body)
+      user_id: req.user._id,
+    } as ICreateParty
 
     if (req.file) {
       data.image = req.file.filename
@@ -47,10 +54,33 @@ export const partyController = {
   },
 
   delete: async (req: Request, res: Response): Promise<Response> => {
-    const { id } = req.params
+    const data = {
+      id: req.params.id,
+      user_id: req.user._id,
+    } as IDeleteParty
 
-    const result = await deletePartyUseCase(id)
+    const result = await deletePartyUseCase(data)
 
     return res.status(result.status).json(result.json)
+  },
+
+  update: async (req: Request, res: Response): Promise<Response> => {
+    const data = {
+      id: req.params.id,
+      title: req.body.title,
+      author: req.body.author,
+      description: req.body.description,
+      budget: req.body.budget,
+      services: req.body.services,
+      user_id: req.user._id,
+    } as IUpdateParty
+
+    if (req.file) {
+      data.image = req.file.filename
+    }
+
+    const party = await updatePartyUseCase(data)
+
+    return res.status(party.status).json(party.json)
   },
 }
