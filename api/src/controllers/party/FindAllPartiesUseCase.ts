@@ -8,9 +8,10 @@ export const findAllPartiesUseCase = async ({
   page,
   skip,
   take,
+  user_id,
 }: IPaginateParams): Promise<IPartyPaginateProperties> => {
-  const parties = await PartyModel.find().skip(skip).limit(take)
-  const count = await PartyModel.countDocuments()
+  const parties = await PartyModel.find({ user_id }).skip(skip).limit(take)
+  const count = await PartyModel.find({ user_id }).countDocuments()
 
   const result = {
     per_page: take,

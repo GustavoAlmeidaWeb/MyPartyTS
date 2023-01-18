@@ -24,6 +24,7 @@ export interface IPaginateParams {
   page: number
   skip: number
   take: number
+  user_id: Types.ObjectId
 }
 
 export interface IPartyPaginateProperties {

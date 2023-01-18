@@ -8,7 +8,7 @@ export const findUseCase = async (
     return { status: 404, json: { errors: ['Usuário não encontrado.'] } }
   }
 
-  const user = await UserModel.findById(id)
+  const user = await UserModel.findById(id).select(['-password'])
 
   return { status: 200, json: user }
 }

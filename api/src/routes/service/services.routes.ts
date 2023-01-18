@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import { validate } from '@middlewares/handleValidation'
-import { authGuard } from '@middlewares/authGuard'
 import { imageUpload } from '@middlewares/imageUploads'
 import {
   serviceCreateValidation,
@@ -9,8 +8,6 @@ import {
 import { serviceController } from '@controllers/service/ServiceController'
 
 const serviceRoutes = Router() as Router
-
-serviceRoutes.use(authGuard)
 
 serviceRoutes.post(
   '/create',

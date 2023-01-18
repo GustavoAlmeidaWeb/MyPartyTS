@@ -39,6 +39,8 @@ export const partyController = {
   },
 
   findAll: async (req: Request, res: Response): Promise<Response> => {
+    const { _id } = req.user
+
     const page =
       req.query.page && Number(req.query.page) > 0 ? Number(req.query.page) : 1
 
@@ -48,7 +50,12 @@ export const partyController = {
     const take = limit
     const skip = (Number(page) - 1) * take
 
-    const parties = await findAllPartiesUseCase({ page, skip, take })
+    const parties = await findAllPartiesUseCase({
+      page,
+      skip,
+      take,
+      user_id: _id,
+    })
 
     return res.status(200).json(parties)
   },
