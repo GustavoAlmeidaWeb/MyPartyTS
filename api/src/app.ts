@@ -1,11 +1,11 @@
+import dotenv from 'dotenv'
 import path from 'node:path'
 import express, { Express } from 'express'
-import dotenv from 'dotenv'
 import cors from 'cors'
 import router from '@routes/Router'
 import { database } from '@db/conn'
 
-dotenv.config()
+dotenv.config({ path: `${__dirname}/../.env` })
 const app = express() as Express
 
 app.use(express.json())
