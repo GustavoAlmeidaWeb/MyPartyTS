@@ -2,6 +2,15 @@ import { IUpdateUser } from '@interfaces/users/IUsers'
 import { UserModel } from '@models/User/User'
 import { compare, hash } from 'bcryptjs'
 
+type ResponseType = {
+  status: number
+  json: IUpdateUser | Errors
+}
+
+type Errors = {
+  errors: string[]
+}
+
 export const updateUseCase = async ({
   _id,
   name,
@@ -9,7 +18,7 @@ export const updateUseCase = async ({
   currentpassword,
   newpassword,
   image = null,
-}: IUpdateUser): Promise<Response | any> => {
+}: IUpdateUser): Promise<ResponseType> => {
   const user = await UserModel.findById(_id)
 
   if (!user) {

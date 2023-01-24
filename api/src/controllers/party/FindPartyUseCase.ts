@@ -1,6 +1,16 @@
+import { ICreateParty } from '@interfaces/party/IParty'
 import { PartyModel } from '@models/Party/Party'
 
-export const findPartyUseCase = async (id: string): Promise<Response | any> => {
+type ResponseType = {
+  status: number
+  json: ICreateParty | Errors
+}
+
+type Errors = {
+  errors: string[]
+}
+
+export const findPartyUseCase = async (id: string): Promise<ResponseType> => {
   try {
     const party = await PartyModel.findById(id)
 

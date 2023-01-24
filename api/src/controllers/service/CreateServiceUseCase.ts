@@ -1,12 +1,21 @@
 import { ServiceModel } from '@models/Service/Service'
 import { ICreateService } from '@interfaces/service/IService'
 
+type ResponseType = {
+  status: number
+  json: ICreateService | Errors
+}
+
+type Errors = {
+  errors: string[]
+}
+
 export const createServiceUseCase = async ({
   name,
   description,
   price,
   image,
-}: ICreateService): Promise<Response | any> => {
+}: ICreateService): Promise<ResponseType> => {
   const data = <ICreateService>{ name, description, price }
 
   image ? (data.image = image) : (data.image = null)

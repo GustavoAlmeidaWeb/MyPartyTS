@@ -9,7 +9,7 @@ export interface ICreateService {
 }
 
 export interface IUpdateService extends ICreateService {
-  id: string
+  id?: string
 }
 
 export interface IPaginateParams {

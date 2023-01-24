@@ -2,6 +2,15 @@ import { checkPartyBudget } from '@helpers/check-party-budget'
 import { IUpdateParty } from '@interfaces/party/IParty'
 import { PartyModel } from '@models/Party/Party'
 
+type ResponseType = {
+  status: number
+  json: IUpdateParty | Errors
+}
+
+type Errors = {
+  errors: string[]
+}
+
 export const updatePartyUseCase = async ({
   title,
   author,
@@ -11,7 +20,7 @@ export const updatePartyUseCase = async ({
   services,
   user_id,
   id,
-}: IUpdateParty): Promise<Response | any> => {
+}: IUpdateParty): Promise<ResponseType> => {
   const party = await PartyModel.findById(id)
 
   if (!party) {

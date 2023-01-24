@@ -1,13 +1,22 @@
 import { IUpdateService } from '@interfaces/service/IService'
 import { ServiceModel } from '@models/Service/Service'
 
+type ResponseType = {
+  status: number
+  json: IUpdateService | Errors
+}
+
+type Errors = {
+  errors: string[]
+}
+
 export const updateServiceUseCase = async ({
   id,
   name,
   description,
   price,
   image,
-}: IUpdateService): Promise<Response | any> => {
+}: IUpdateService): Promise<ResponseType> => {
   const service = await ServiceModel.findById(id)
   service.name = name
   service.description = description

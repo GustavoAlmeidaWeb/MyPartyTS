@@ -1,10 +1,20 @@
 import { IDeleteParty } from '@interfaces/party/IParty'
 import { PartyModel } from '@models/Party/Party'
 
+type ResponseType = {
+  status: number
+  json: ErrorsOrMsg
+}
+
+type ErrorsOrMsg = {
+  errors?: string[]
+  message?: string
+}
+
 export const deletePartyUseCase = async ({
   user_id,
   id,
-}: IDeleteParty): Promise<Response | any> => {
+}: IDeleteParty): Promise<ResponseType> => {
   try {
     const party = await PartyModel.findById(id)
 

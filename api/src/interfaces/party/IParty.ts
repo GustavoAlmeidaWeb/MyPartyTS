@@ -12,7 +12,7 @@ export interface ICreateParty {
 }
 
 export interface IUpdateParty extends ICreateParty {
-  id: string
+  id?: string
 }
 
 export interface IDeleteParty {

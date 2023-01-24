@@ -1,8 +1,16 @@
 import { ServiceModel } from '@models/Service/Service'
+import { ICreateService } from '@interfaces/service/IService'
 
-export const getServiceUseCase = async (
-  id: string,
-): Promise<Response | any> => {
+type ResponseType = {
+  status: number
+  json: ICreateService | Errors
+}
+
+type Errors = {
+  errors: string[]
+}
+
+export const getServiceUseCase = async (id: string): Promise<ResponseType> => {
   try {
     const service = await ServiceModel.findById(id)
 

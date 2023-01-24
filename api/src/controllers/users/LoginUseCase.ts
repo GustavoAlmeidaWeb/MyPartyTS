@@ -3,10 +3,20 @@ import { ILoginUser } from '@interfaces/users/IUsers'
 import { UserModel } from '@models/User/User'
 import { compare } from 'bcryptjs'
 
+type ResponseType = {
+  status: number
+  json: ErrorsOrToken
+}
+
+type ErrorsOrToken = {
+  errors?: string[]
+  token?: string
+}
+
 export const loginUseCase = async ({
   email,
   password,
-}: ILoginUser): Promise<Response | any> => {
+}: ILoginUser): Promise<ResponseType> => {
   const user = await UserModel.findOne({ email })
 
   if (!user) {

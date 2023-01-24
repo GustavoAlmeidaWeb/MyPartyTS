@@ -2,13 +2,22 @@ import { ICreateUser } from '@interfaces/users/IUsers'
 import { UserModel } from '@models/User/User'
 import { hash } from 'bcryptjs'
 
+type ResponseType = {
+  status: number
+  json: ICreateUser | Errors
+}
+
+type Errors = {
+  errors: string[]
+}
+
 export const registerUseCase = async ({
   name,
   email,
   phone,
   password,
   image,
-}: ICreateUser): Promise<Response | any> => {
+}: ICreateUser): Promise<ResponseType> => {
   const userExists = await UserModel.findOne({ email })
 
   if (userExists) {

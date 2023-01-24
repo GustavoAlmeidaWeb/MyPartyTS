@@ -2,6 +2,15 @@ import { checkPartyBudget } from '@helpers/check-party-budget'
 import { ICreateParty } from '@interfaces/party/IParty'
 import { PartyModel } from '@models/Party/Party'
 
+type ResponseType = {
+  status: number
+  json: ICreateParty | Errors
+}
+
+type Errors = {
+  errors: string[]
+}
+
 export const createPartyUseCase = async ({
   title,
   author,
@@ -10,7 +19,7 @@ export const createPartyUseCase = async ({
   image,
   services,
   user_id,
-}: ICreateParty): Promise<Response | any> => {
+}: ICreateParty): Promise<ResponseType> => {
   if (services && !checkPartyBudget(budget, services)) {
     return {
       status: 406,

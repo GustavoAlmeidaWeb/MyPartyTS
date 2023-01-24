@@ -1,8 +1,18 @@
 import { ServiceModel } from '@models/Service/Service'
 
+type ResponseType = {
+  status: number
+  json: ErrorsOrMsg
+}
+
+type ErrorsOrMsg = {
+  errors?: string[]
+  message?: string
+}
+
 export const deleteServiceUseCase = async (
   id: string,
-): Promise<Response | any> => {
+): Promise<ResponseType> => {
   try {
     const service = await ServiceModel.findById(id)
 
