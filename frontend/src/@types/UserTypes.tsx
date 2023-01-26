@@ -19,6 +19,12 @@ export type RegisterType = {
   image?: string
 }
 
+export type UpdateType = {
+  name: string
+  phone: string
+  image?: File | Blob | MediaSource
+}
+
 export type AuthInitialType = {
   user: IUserRegister | IUserLogin | PayloadAction
   error: any

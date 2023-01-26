@@ -1,11 +1,14 @@
 import { Store } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
 import thunkMiddleware from 'redux-thunk'
+
 import authReducer from '@src/slices/authSlice'
+import userReducer from '@src/slices/userSlice'
 
 export const store: Store = configureStore({
     reducer: {
       auth: authReducer,
+      user: userReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
       serializableCheck: false,

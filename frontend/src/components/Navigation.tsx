@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { Navbar, Nav, Container } from "react-bootstrap"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faRightToBracket, faRightFromBracket ,faFileCirclePlus } from "@fortawesome/free-solid-svg-icons"
+import { faRightToBracket, faRightFromBracket ,faFileCirclePlus, faUser } from "@fortawesome/free-solid-svg-icons"
 import { ThunkDispatch } from "redux-thunk"
 import { RootState } from "@src/store/store"
 import { AnyAction } from "@reduxjs/toolkit"
@@ -37,6 +37,7 @@ const Navigation = ({ auth }: Props): JSX.Element => {
               </>
             ) : (
               <>
+                <NavLink className="nav-link" to='/minha-conta'><FontAwesomeIcon icon={faUser} /> Minha conta</NavLink>
                 <NavLink className="nav-link" to='/login' onClick={handleLogout}><FontAwesomeIcon icon={faRightFromBracket} /> Sair</NavLink>
               </>
             )}

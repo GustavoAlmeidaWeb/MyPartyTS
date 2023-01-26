@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 
+export const uploads = import.meta.env.VITE_API_UPLOADS
+
 export const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 })

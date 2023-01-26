@@ -11,6 +11,7 @@ import Navigation from '@src/components/Navigation'
 import Home from '@src/pages/Home/Home'
 import Login from '@src/pages/Auth/Login'
 import Register from '@src/pages/Auth/Register'
+import MyAccount from "@src/pages/MyAccount/MyAccount"
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Container>
         <Routes>
           <Route path='/' element={auth ? <Home /> : <Navigate to="/login" />} />
+          <Route path='/minha-conta' element={auth ? <MyAccount /> : <Navigate to="/login" />} />
           <Route path='/login' element={!auth ? <Login /> : <Navigate to="/" />} />
           <Route path='/cadastro' element={!auth ? <Register /> : <Navigate to="/" />} />
           <Route path='*' element={<Home />} />
