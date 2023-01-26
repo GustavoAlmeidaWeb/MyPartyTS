@@ -1,0 +1,7 @@
+.btn-show-password {
+  right: 0;
+  top: 10px;
+}
+.btn-show-password:active {
+  border-color: transparent !important;
+}

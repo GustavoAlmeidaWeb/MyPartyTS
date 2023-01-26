@@ -1,5 +1,9 @@
-import { IUserLogin, IUserRegister } from "../interfaces/IUser"
+import { IUserLogin, IUserRegister } from "@src/interfaces/IUser"
 import { PayloadAction } from '@reduxjs/toolkit'
+
+/*
+ * AUTH TYPES
+ */
 
 export type LoginType = {
   email: string

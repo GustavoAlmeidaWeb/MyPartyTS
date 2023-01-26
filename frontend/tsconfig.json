@@ -16,16 +16,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    // "baseUrl": "./",
-    // "paths": {
-    //   "@_types/*":["src/@types/*"],
-    //   "@store/*":["src/store/*"],
-    //   "@slices/*":["src/slices/*"],
-    //   "@services/*":["src/services/*"],
-    //   "@interfaces/*":["src/interfaces/*"],
-    //   "@hooks/*":["src/hooks/*"],
-    //   "@pages/*":["src/pages/*"],
-    // },
+    "baseUrl": "./",
+    "paths": {
+      "@src/*":["src/*"],
+    },
     "typeRoots": [
       "src/@types",
       "node_modules/@types"

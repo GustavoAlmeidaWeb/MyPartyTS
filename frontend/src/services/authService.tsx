@@ -1,5 +1,5 @@
-import { LoginType, RegisterType } from "../@types/UserTypes"
 import { IUserLogin, IUserRegister } from "../interfaces/IUser"
+import { LoginType, RegisterType } from "../@types/UserTypes"
 import { api } from "../utils/config"
 
 const register = async (data: RegisterType): Promise<IUserRegister> => {
@@ -13,7 +13,7 @@ const login = async (data: LoginType): Promise<IUserLogin> => {
 }
 
 const logout = async (): Promise<void> => {
-  localStorage.removeItem('user_account')
+  return localStorage.removeItem('user_account')
 }
 
 const authService = {
