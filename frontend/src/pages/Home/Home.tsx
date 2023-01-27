@@ -1,10 +1,61 @@
-import React from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { uploads } from '@src/utils/config'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from '@reduxjs/toolkit'
+import { getUser } from '@src/slices/userSlice'
+import { logout } from '@src/slices/authSlice'
+import { RootState } from '@src/store/store'
+import { useResetAuthStates } from '@src/hooks/useResetStates'
 
-type Props = {}
+import { Col } from "react-bootstrap"
 
-const Home = (props: Props) => {
+import Loading from '@src/components/Loading'
+import { getAllServices } from '@src/slices/serviceSlice'
+
+const Home = (): JSX.Element => {
+
+  const { user, loading } = useSelector((state: RootState) => state.user)
+  const { services } = useSelector((state: RootState) => state.service)
+  const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
+  const resetStates = useResetAuthStates(dispatch)
+
+  useEffect(() => {
+    dispatch(getUser())
+    dispatch(getAllServices())
+  }, [dispatch])
+
+  const handleLogout = () => {
+    dispatch(logout())
+    resetStates()
+  }
+
+  if(loading) {
+    return <Loading />
+  }
+
+  // console.log(user)
+  console.log(services)
+
   return (
-    <div>Home</div>
+    <Col md={{ span: 10, offset: 1 }} lg={{ span: 10, offset: 1 }} xl={{ span: 8, offset: 2 }}>
+      {user.data && (
+        <div className='d-flex align-items-center'>
+          <div className='w-25'>
+            {user.data.image ? (<>
+              <img className="w-100 rounded-circle" src={`${uploads}/users/${user.data.image}`} alt={user.data.name} />
+            </>) : (<>
+              <img className="w-100 rounded-circle" src="https://via.placeholder.com/250" alt={user.data.name} />
+            </>)}
+          </div>
+          <div className='w-75 ps-3'>
+            <h2 className='display-6'>Olá, <strong>{user.data.name}</strong></h2>
+            <p>Não é você ? <Link className='text-decoration-none' to="/login" onClick={handleLogout}>Clique aqui para sair</Link></p>
+          </div>
+        </div>
+      )}
+    </Col>
   )
 }
 

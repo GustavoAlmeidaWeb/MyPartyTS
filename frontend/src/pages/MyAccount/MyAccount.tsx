@@ -9,12 +9,15 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { useResetUserStates } from '@src/hooks/useResetStates'
 
 import { Col, Form, FloatingLabel, Button } from "react-bootstrap"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTrashCan, faPenToSquare } from "@fortawesome/free-regular-svg-icons"
 
 import Message from '@src/components/Message'
 
 const MyAccount = (): JSX.Element => {
 
   const { user, loading, message, error } = useSelector((state: RootState) => state.user)
+
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const resetStates = useResetUserStates(dispatch)
 
@@ -28,10 +31,12 @@ const MyAccount = (): JSX.Element => {
   const [newPass, setNewPass] = useState<string>('')
   const [confirmPass, setConfirmPass] = useState<string>('')
 
+  // Get user data
   useEffect(() => {
     dispatch(getUser())
   }, [dispatch])
 
+  // Set user data in inputs
   useEffect(() => {
     if(user.data) {
       setName(user.data.name)
@@ -41,14 +46,15 @@ const MyAccount = (): JSX.Element => {
     }
   }, [user])
 
+  // Get image from file input change
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     // Image preview
     const img: File | Blob | MediaSource = e.target.files[0]
     setPreviewImage(img)
   }
 
+  // Password change event
   const handleSwitch = () => {
-
     if(changePass) {
       setChangePass(false)
       setCurrentPass('')
@@ -61,6 +67,7 @@ const MyAccount = (): JSX.Element => {
     }
   }
 
+  // Get all data and dispatch to update user profile
   const handleUpdate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
 
@@ -86,6 +93,7 @@ const MyAccount = (): JSX.Element => {
     resetStates()
   }
 
+  // Dispatch to delete user account
   const handleDelete = async () => {
     await dispatch(deleteUser())
     dispatch(logout())
@@ -132,14 +140,14 @@ const MyAccount = (): JSX.Element => {
         </FloatingLabel>
         {!loading && (
           <Form.Group className="d-flex justify-content-between">
-            <Button type="button" variant="danger" size="lg" onClick={handleDelete}>Excluir conta</Button>
-            <Button variant="primary" size="lg" type="submit">Atualizar Conta</Button>
+            <Button type="button" variant="danger" onClick={handleDelete}><FontAwesomeIcon icon={faTrashCan} /> Excluir conta</Button>
+            <Button variant="primary" type="submit"><FontAwesomeIcon icon={faPenToSquare} /> Atualizar Conta</Button>
           </Form.Group>
         )}
         {loading && (
           <Form.Group className="d-flex justify-content-between">
-            <Button type="button" variant="danger" size="lg" onClick={handleDelete} disabled >Aguarde</Button>
-            <Button variant="primary" size="lg" type="submit" disabled >Aguarde</Button>
+            <Button type="button" variant="danger" onClick={handleDelete} disabled >Aguarde</Button>
+            <Button variant="primary" type="submit" disabled >Aguarde</Button>
           </Form.Group>
         )}
       </Form>

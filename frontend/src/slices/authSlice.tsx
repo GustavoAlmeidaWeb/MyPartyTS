@@ -4,7 +4,7 @@ import { AuthInitialType, LoginType, RegisterType } from '../@types/UserTypes'
 import { IUserLogin, IUserRegister } from '../interfaces/IUser'
 import authService from '../services/authService'
 
-const user = { data: JSON.parse(localStorage.getItem('myparty'))};
+const user = { data: JSON.parse(localStorage.getItem('myparty'))}
 
 const initialState = {
     user: user || {},
@@ -69,7 +69,6 @@ export const logout = createAsyncThunk('auth/logout', async (): Promise<void> =>
 
 })
 
-
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -121,6 +120,7 @@ export const authSlice = createSlice({
         state.loading = false
         state.success = true
         state.error = null
+        state.message = 'Você fez logout com segurança.'
         state.user = {}
       })
   },

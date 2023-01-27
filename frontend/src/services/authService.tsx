@@ -13,7 +13,7 @@ const login = async (data: LoginType): Promise<IUserLogin> => {
 }
 
 const logout = async (): Promise<void> => {
-  return localStorage.removeItem('user_account')
+  return localStorage.removeItem('myparty')
 }
 
 const authService = {
