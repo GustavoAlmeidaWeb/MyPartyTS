@@ -1,11 +1,11 @@
 import axios from "axios"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { AuthInitialType, UpdateType } from "@src/@types/UserTypes"
+import { AuthInitialType } from "@src/@types/UserTypes"
 import { RootState } from "@src/store/store"
 import userService from "@src/services/userService"
 
 const initialState = {
-  user: null,
+  user: {},
   error: null,
   success: false,
   loading: false,
@@ -23,7 +23,6 @@ export const getUser = createAsyncThunk('user/get', async (_, thunkAPI) => {
   } catch (e) {
 
     if (axios.isAxiosError(e)){
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -42,7 +41,24 @@ export const updateUser = createAsyncThunk('user/update', async (userData: FormD
   } catch (e) {
 
     if (axios.isAxiosError(e)){
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+    }
+  }
 
+})
+
+// Delete user
+export const deleteUser = createAsyncThunk('user/delete', async (_, thunkAPI) => {
+
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res = await userService.deleteUser(auth.user.data.token)
+    return res
+
+  } catch (e) {
+
+    if (axios.isAxiosError(e)){
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -78,7 +94,7 @@ export const userSlice = createSlice({
         state.loading = false
         state.success = false
         state.error = action.payload
-        state.user = null
+        state.user = {}
       })
       .addCase(updateUser.pending, (state) => {
         state.loading = true
@@ -93,6 +109,23 @@ export const userSlice = createSlice({
         state.message = 'Perfil atualizado com sucesso.'
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false
+        state.success = false
+        state.error = action.payload
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true
+        state.success = false
+        state.error = null
+      })
+      .addCase(deleteUser.fulfilled, (state) => {
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.message = 'Perfil excluído com sucesso.'
+        state.user = {}
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
         state.loading = false
         state.success = false
         state.error = action.payload

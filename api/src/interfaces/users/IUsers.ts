@@ -6,6 +6,8 @@ export interface ICreateUser {
   phone: string
   password: string
   image?: string
+  token?: string
+  _doc?: any
 }
 
 export interface IUpdateUser {

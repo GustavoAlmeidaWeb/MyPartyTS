@@ -26,7 +26,7 @@ export type UpdateType = {
 }
 
 export type AuthInitialType = {
-  user: IUserRegister | IUserLogin | PayloadAction
+  user: IUserRegister | IUserLogin | PayloadAction | object
   error: any
   success: boolean
   loading: boolean

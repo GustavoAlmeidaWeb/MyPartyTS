@@ -1,5 +1,4 @@
-import { IUserLogin, IUserRegister } from "../interfaces/IUser"
-import { LoginType, RegisterType, UpdateType } from "../@types/UserTypes"
+import { IUserRegister } from "../interfaces/IUser"
 import { api, setTokenHeaders } from "../utils/config"
 
 const getUser = async (token: string): Promise<IUserRegister> => {
@@ -14,9 +13,15 @@ const updateUser = async (token: string, updateUser: FormData): Promise<IUserReg
   return res
 }
 
+const deleteUser = async (token: string): Promise<void> => {
+  setTokenHeaders(token)
+  await api.delete('/users/delete')
+}
+
 const userService = {
   getUser,
   updateUser,
+  deleteUser,
 }
 
 export default userService

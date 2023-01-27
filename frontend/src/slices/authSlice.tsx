@@ -7,7 +7,7 @@ import authService from '../services/authService'
 const user = { data: JSON.parse(localStorage.getItem('myparty'))};
 
 const initialState = {
-    user: user || null,
+    user: user || {},
     error: null,
     success: false,
     loading: false,
@@ -75,53 +75,53 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
       resetAuthStates: (state) => {
-        state.loading = false;
-        state.error = null;
-        state.success = false;
-        state.message = null;
+        state.loading = false
+        state.error = null
+        state.success = false
+        state.message = null
       },
   },
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
+        state.loading = true
+        state.success = false
+        state.error = null
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.user = action.payload;
-        state.message = 'Cadastro realizado com sucesso';
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = action.payload
+        state.message = 'Cadastro realizado com sucesso'
       })
       .addCase(register.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.user = null;
+        state.loading = false
+        state.success = false
+        state.error = action.payload
+        state.user = {}
       })
       .addCase(login.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true
+        state.error = null
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.user = action.payload;
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = action.payload
         state.message = 'Login realizado com sucesso.';
       })
       .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-        state.user = null;
+        state.loading = false
+        state.error = action.payload
+        state.user = {}
       })
       .addCase(logout.fulfilled, (state) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.user = null;
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = {}
       })
   },
 });

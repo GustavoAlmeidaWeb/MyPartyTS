@@ -1,16 +1,15 @@
-import { Link } from 'react-router-dom'
 import { uploads } from '@src/utils/config'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@src/store/store'
-import { getUser, updateUser } from '@src/slices/userSlice'
+import { deleteUser, getUser, updateUser } from '@src/slices/userSlice'
+import { logout } from '@src/slices/authSlice'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useResetUserStates } from '@src/hooks/useResetStates'
 
 import { Col, Form, FloatingLabel, Button } from "react-bootstrap"
 
-import Loading from '@src/components/Loading'
 import Message from '@src/components/Message'
 
 const MyAccount = (): JSX.Element => {
@@ -24,6 +23,10 @@ const MyAccount = (): JSX.Element => {
   const [phone, setPhone] = useState<string>('')
   const [img, setImg] = useState<string>('')
   const [previewImage, setPreviewImage] = useState<File | Blob | MediaSource>()
+  const [changePass, setChangePass] = useState<boolean>(false)
+  const [currentPass, setCurrentPass] = useState<string>('')
+  const [newPass, setNewPass] = useState<string>('')
+  const [confirmPass, setConfirmPass] = useState<string>('')
 
   useEffect(() => {
     dispatch(getUser())
@@ -36,14 +39,26 @@ const MyAccount = (): JSX.Element => {
       setPhone(user.data.phone)
       setImg(user.data.image)
     }
-  }, [user.data])
-
-  console.log(user)
+  }, [user])
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     // Image preview
     const img: File | Blob | MediaSource = e.target.files[0]
     setPreviewImage(img)
+  }
+
+  const handleSwitch = () => {
+
+    if(changePass) {
+      setChangePass(false)
+      setCurrentPass('')
+      setNewPass('')
+      setConfirmPass('')
+      document.querySelectorAll('.ipt-password').forEach((ipt, value) => ipt.setAttribute('disabled', ''))
+    } else {
+      setChangePass(true)
+      document.querySelectorAll('.ipt-password').forEach((ipt) => ipt.removeAttribute('disabled'))
+    }
   }
 
   const handleUpdate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -58,6 +73,12 @@ const MyAccount = (): JSX.Element => {
       userData.image = previewImage
     }
 
+    if(changePass) {
+      userData.currentpassword = currentPass
+      userData.newpassword = newPass
+      userData.confirmnewpassword = confirmPass
+    }
+
     const formData: FormData = new FormData()
     Object.keys(userData).forEach((key: string) => formData.append(key, userData[key]))
 
@@ -65,8 +86,10 @@ const MyAccount = (): JSX.Element => {
     resetStates()
   }
 
-  if(loading || user === null) {
-    return <Loading />
+  const handleDelete = async () => {
+    await dispatch(deleteUser())
+    dispatch(logout())
+    resetStates()
   }
 
   return (
@@ -94,8 +117,31 @@ const MyAccount = (): JSX.Element => {
         <FloatingLabel controlId="floatingInput" label="Telefone" className="mb-3 text-dark" >
           <Form.Control type="text" placeholder="Telefone" onChange={(e) => setPhone(e.target.value)} value={phone || ''} />
         </FloatingLabel>
-        {!loading && <Button className="w-100" variant="primary" size="lg" type="submit">Atualizar</Button>}
-        {loading && <Button className="w-100" variant="primary" size="lg" type="submit" disabled>Aguarde</Button>}
+        <Form.Group className='d-flex align-items-center my-4'>
+          <h3 className='h4'>Deseja alterar sua senha ?</h3>
+          <Form.Check className='ms-2' type="switch" id="custom-switch" onChange={handleSwitch} />
+        </Form.Group>
+        <FloatingLabel controlId="floatingInput" label="Senha atual" className="mb-3 text-dark" >
+          <Form.Control className="ipt-password" type="password" placeholder="Senha atual" onChange={(e) => setCurrentPass(e.target.value)} value={currentPass || ''} disabled />
+        </FloatingLabel>
+        <FloatingLabel controlId="floatingInput" label="Nova senha" className="mb-3 text-dark" >
+          <Form.Control className="ipt-password" type="password" placeholder="Nova senha" onChange={(e) => setNewPass(e.target.value)} value={newPass || ''} disabled />
+        </FloatingLabel>
+        <FloatingLabel controlId="floatingInput" label="Confirmar nova senha" className="mb-3 text-dark" >
+          <Form.Control className="ipt-password" type="password" placeholder="Confirmar nova senha" onChange={(e) => setConfirmPass(e.target.value)} value={confirmPass || ''} disabled />
+        </FloatingLabel>
+        {!loading && (
+          <Form.Group className="d-flex justify-content-between">
+            <Button type="button" variant="danger" size="lg" onClick={handleDelete}>Excluir conta</Button>
+            <Button variant="primary" size="lg" type="submit">Atualizar Conta</Button>
+          </Form.Group>
+        )}
+        {loading && (
+          <Form.Group className="d-flex justify-content-between">
+            <Button type="button" variant="danger" size="lg" onClick={handleDelete} disabled >Aguarde</Button>
+            <Button variant="primary" size="lg" type="submit" disabled >Aguarde</Button>
+          </Form.Group>
+        )}
       </Form>
       {message && <Message type="success" msg={message} />}
       {error && <Message type="danger" msg={error} />}

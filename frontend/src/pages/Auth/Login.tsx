@@ -16,6 +16,7 @@ import Message from "@src/components/Message"
 const Login = (): JSX.Element => {
 
   const { loading, error, message } = useSelector((state: RootState) => state.auth)
+  const { error: error_user, message: msg_user } = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const resetMessage = useResetAuthStates(dispatch)
 
@@ -56,6 +57,8 @@ const Login = (): JSX.Element => {
       </Form>
       {message && <Message type="success" msg={message} />}
       {error && <Message type="danger" msg={error} />}
+      {msg_user && <Message type="success" msg={msg_user} />}
+      {error_user && <Message type="danger" msg={error_user} />}
     </Col>
   )
 }

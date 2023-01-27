@@ -1,3 +1,4 @@
+import { generateToken } from '@helpers/generate-token'
 import { ICreateUser } from '@interfaces/users/IUsers'
 import { UserModel } from '@models/User/User'
 import { hash } from 'bcryptjs'
@@ -33,7 +34,10 @@ export const registerUseCase = async ({
       password: passHash,
       image,
     })
-    return { status: 201, json: user }
+    return {
+      status: 201,
+      json: { ...user._doc, token: generateToken(user._id) },
+    }
   } catch (error) {
     return {
       status: 401,
