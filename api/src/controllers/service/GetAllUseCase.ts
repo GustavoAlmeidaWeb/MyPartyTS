@@ -8,10 +8,11 @@ export const getAllServicesUseCase = async ({
   page,
   skip,
   take,
+  user_id,
 }: IPaginateParams): Promise<IServicesPaginateProperties> => {
-  const services = await ServiceModel.find().skip(skip).limit(take)
+  const services = await ServiceModel.find({ user_id }).skip(skip).limit(take)
 
-  const count = await ServiceModel.countDocuments()
+  const count = await ServiceModel.find({ user_id }).countDocuments()
 
   const result = {
     per_page: take,

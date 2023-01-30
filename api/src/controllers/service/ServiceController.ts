@@ -12,6 +12,7 @@ export const serviceController = {
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
+      user_id: req.user._id,
     }
 
     req.file && (data.image = req.file.filename)
@@ -39,15 +40,18 @@ export const serviceController = {
     const take = limit
     const skip = (Number(page) - 1) * take
 
-    const services = await getAllServicesUseCase({ page, skip, take })
+    const services = await getAllServicesUseCase({
+      page,
+      skip,
+      take,
+      user_id: req.user._id,
+    })
 
     return res.status(200).json(services)
   },
 
   delete: async (req: Request, res: Response): Promise<Response> => {
-    const { id } = req.params
-
-    const remove = await deleteServiceUseCase(id)
+    const remove = await deleteServiceUseCase(req.params.id, req.user._id)
 
     return res.status(remove.status).json(remove.json)
   },
@@ -59,6 +63,7 @@ export const serviceController = {
       description: req.body.description,
       price: req.body.price,
       image: req.file.filename,
+      user_id: req.user._id,
     }
 
     const service = await updateServiceUseCase(data)

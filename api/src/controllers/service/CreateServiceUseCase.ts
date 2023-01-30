@@ -15,8 +15,9 @@ export const createServiceUseCase = async ({
   description,
   price,
   image,
+  user_id,
 }: ICreateService): Promise<ResponseType> => {
-  const data = <ICreateService>{ name, description, price }
+  const data = <ICreateService>{ name, description, price, user_id }
 
   image ? (data.image = image) : (data.image = null)
 

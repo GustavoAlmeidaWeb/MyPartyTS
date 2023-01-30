@@ -16,6 +16,7 @@ export const updateServiceUseCase = async ({
   description,
   price,
   image,
+  user_id,
 }: IUpdateService): Promise<ResponseType> => {
   const service = await ServiceModel.findById(id)
   service.name = name
@@ -24,6 +25,15 @@ export const updateServiceUseCase = async ({
   service.image = image
 
   try {
+    if (!service.user_id.equals(user_id)) {
+      return {
+        status: 401,
+        json: {
+          errors: ['Você não tem permissão para executar essa ação.'],
+        },
+      }
+    }
+
     await service.save()
     return { status: 200, json: service }
   } catch (e) {

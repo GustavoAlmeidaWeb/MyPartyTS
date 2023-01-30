@@ -1,24 +1,24 @@
 import axios from "axios"
 import { RootState } from "@src/store/store"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { ServiceInitialInterface } from "@src/interfaces/IService"
-import serviceService from "@src/services/serviceService"
+import { PartyInitialInterface } from "@src/interfaces/IParty"
+import partyService from "@src/services/partyService"
 
 const initialState = {
-  service: {},
-  services: {},
+  party: {},
+  parties: {},
   error: null,
   success: false,
   loading: false,
   message: null,
-} as ServiceInitialInterface
+} as PartyInitialInterface
 
-// Get a service
-export const getService = createAsyncThunk('service/get', async (id: string, thunkAPI) => {
+// Get a party
+export const getParty = createAsyncThunk('party/get', async (id: string, thunkAPI) => {
 
   try {
     const { auth }: RootState = thunkAPI.getState()
-    const res = await serviceService.getService(id, auth.user.data.token)
+    const res = await partyService.getParty(id, auth.user.data.token)
     return res.data
 
   } catch (e) {
@@ -31,12 +31,12 @@ export const getService = createAsyncThunk('service/get', async (id: string, thu
 
 })
 
-// Get all services
-export const getAllServices = createAsyncThunk('service/getAll', async (_, thunkAPI) => {
+// Get all parties
+export const getAllParties = createAsyncThunk('party/getAll', async (_, thunkAPI) => {
 
   try {
     const { auth }: RootState = thunkAPI.getState()
-    const res = await serviceService.getAllServices(auth.user.data.token)
+    const res = await partyService.getAllParties(auth.user.data.token)
     return res.data
 
   } catch (e) {
@@ -49,11 +49,12 @@ export const getAllServices = createAsyncThunk('service/getAll', async (_, thunk
 
 })
 
-export const serviceSlice = createSlice({
-  name: 'service',
+
+export const partySlice = createSlice({
+  name: 'party',
   initialState,
   reducers: {
-    resetServiceStates: (state) => {
+    resetPartyStates: (state) => {
       state.loading = false
       state.error = null
       state.success = false
@@ -62,42 +63,43 @@ export const serviceSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getService.pending, (state) => {
+      .addCase(getParty.pending, (state) => {
         state.loading = true
         state.success = false
         state.error = null
       })
-      .addCase(getService.fulfilled, (state, action) => {
+      .addCase(getParty.fulfilled, (state, action) => {
         state.loading = false
         state.success = true
         state.error = null
-        state.service = action.payload
+        state.party = action.payload
       })
-      .addCase(getService.rejected, (state, action) => {
+      .addCase(getParty.rejected, (state, action) => {
         state.loading = false
         state.success = false
         state.error = action.payload
-        state.service = {}
+        state.party = {}
       })
-      .addCase(getAllServices.pending, (state) => {
+      .addCase(getAllParties.pending, (state) => {
         state.loading = true
         state.success = false
         state.error = null
       })
-      .addCase(getAllServices.fulfilled, (state, action) => {
+      .addCase(getAllParties.fulfilled, (state, action) => {
         state.loading = false
         state.success = true
         state.error = null
-        state.services = action.payload
+        state.parties = action.payload
+        console.log(action.payload)
       })
-      .addCase(getAllServices.rejected, (state, action) => {
+      .addCase(getAllParties.rejected, (state, action) => {
         state.loading = false
         state.success = false
         state.error = action.payload
-        state.services = {}
+        state.parties = {}
       })
   },
 })
 
-export const { resetServiceStates } = serviceSlice.actions
-export default serviceSlice.reducer
+export const { resetPartyStates } = partySlice.actions
+export default partySlice.reducer

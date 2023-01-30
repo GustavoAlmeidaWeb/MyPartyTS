@@ -1,4 +1,5 @@
 import { ServiceModel } from '@models/Service/Service'
+import { Types } from 'mongoose'
 
 type ResponseType = {
   status: number
@@ -12,6 +13,7 @@ type ErrorsOrMsg = {
 
 export const deleteServiceUseCase = async (
   id: string,
+  user_id: Types.ObjectId,
 ): Promise<ResponseType> => {
   try {
     const service = await ServiceModel.findById(id)
@@ -20,6 +22,13 @@ export const deleteServiceUseCase = async (
       return {
         status: 404,
         json: { errors: ['Serviço não encontrado.'] },
+      }
+    }
+
+    if (!service.user_id.equals(user_id)) {
+      return {
+        status: 401,
+        json: { errors: ['Você não tem permissão para executar essa ação.'] },
       }
     }
 

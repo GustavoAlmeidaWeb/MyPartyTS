@@ -1,16 +1,16 @@
-import { ServicesArrayType } from "@src/@types/ServiceTypes"
+import { IServiceCreateData, IServicesAllData } from "@src/interfaces/IService"
 import { api, setTokenHeaders } from "../utils/config"
 
-const getService = async (id: string, token: string) => {
+const getService = async (id: string, token: string): Promise<IServiceCreateData> => {
   setTokenHeaders(token)
-  const { data } = await api.get(`/services/${id}`)
-  return data
+  const res: IServiceCreateData = await api.get(`/services/${id}`)
+  return res
 }
 
-const getAllServices = async (token: string): Promise<ServicesArrayType> => {
+const getAllServices = async (token: string): Promise<IServicesAllData> => {
   setTokenHeaders(token)
-  const { data } = await api.get('/services')
-  return data
+  const res: IServicesAllData = await api.get('/services')
+  return res
 }
 
 const serviceService = {
