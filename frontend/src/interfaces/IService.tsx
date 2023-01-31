@@ -31,3 +31,15 @@ export interface ServiceInitialInterface {
   loading: boolean
   message: string
 }
+
+export interface IServiceDataForm {
+  name: string
+  description: string
+  price: number
+  image?: File | Blob | MediaSource
+}
+
+export interface IPageParams {
+  limit: number
+  page: number
+}

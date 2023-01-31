@@ -1,4 +1,4 @@
-import { IServiceCreateData, IServicesAllData } from "@src/interfaces/IService"
+import { IPageParams, IServiceCreateData, IServiceDataForm, IServicesAllData } from "@src/interfaces/IService"
 import { api, setTokenHeaders } from "../utils/config"
 
 const getService = async (id: string, token: string): Promise<IServiceCreateData> => {
@@ -7,15 +7,22 @@ const getService = async (id: string, token: string): Promise<IServiceCreateData
   return res
 }
 
-const getAllServices = async (token: string): Promise<IServicesAllData> => {
+const getAllServices = async (token: string, { limit, page }: IPageParams): Promise<IServicesAllData> => {
   setTokenHeaders(token)
-  const res: IServicesAllData = await api.get('/services')
+  const res: IServicesAllData = await api.get(`/services?limit=${limit || 10}&page=${page || 1}`)
+  return res
+}
+
+const createService = async (data: FormData, token: string) => {
+  setTokenHeaders(token)
+  const res: IServiceCreateData = await api.post('/services/create', data)
   return res
 }
 
 const serviceService = {
   getService,
   getAllServices,
+  createService,
 }
 
 export default serviceService
