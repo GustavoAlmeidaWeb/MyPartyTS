@@ -1,4 +1,4 @@
-import { IPageParams, IServiceCreateData, IServiceDataForm, IServicesAllData } from "@src/interfaces/IService"
+import { IPageParams, IServiceCreateData, IServiceDeleteData, IServicesAllData } from "@src/interfaces/IService"
 import { api, setTokenHeaders } from "../utils/config"
 
 const getService = async (id: string, token: string): Promise<IServiceCreateData> => {
@@ -19,10 +19,17 @@ const createService = async (data: FormData, token: string) => {
   return res
 }
 
+const deleteService = async (id: string, token: string): Promise<IServiceDeleteData> => {
+  setTokenHeaders(token)
+  const res: IServiceDeleteData = await api.delete(`/services/${id}`)
+  return res
+}
+
 const serviceService = {
   getService,
   getAllServices,
   createService,
+  deleteService,
 }
 
 export default serviceService

@@ -2,3 +2,7 @@
   min-height: 73.5vh;
   padding: 40px 0;
 }
+
+.max-height-120 {
+  max-height: 120px;
+}

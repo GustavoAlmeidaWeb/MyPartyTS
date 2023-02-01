@@ -9,6 +9,15 @@ export interface IServiceCreate {
   errors?: string[]
 }
 
+export interface IServiceDelete {
+  message?: string
+  errors?: string[]
+}
+
+export interface IServiceDeleteData {
+  data: IServiceDelete
+}
+
 export interface IServiceCreateData {
   data: IServiceCreate
 }

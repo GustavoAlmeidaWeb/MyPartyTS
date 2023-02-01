@@ -22,7 +22,7 @@ function App() {
   return (
     <>
     <Navigation auth={auth} />
-    <Container className="app" fluid>
+    <Container as="main" className="app" fluid>
       <Container>
         <Routes>
           <Route path='/' element={auth ? <Home /> : <Navigate to="/login" />} />

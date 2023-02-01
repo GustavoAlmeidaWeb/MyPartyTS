@@ -1,7 +1,7 @@
 import axios from "axios"
 import { RootState } from "@src/store/store"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { IPageParams, IServiceDataForm, ServiceInitialInterface } from "@src/interfaces/IService"
+import { IPageParams, IServiceDataForm, IServiceDeleteData, ServiceInitialInterface } from "@src/interfaces/IService"
 import serviceService from "@src/services/serviceService"
 
 const initialState = {
@@ -67,6 +67,24 @@ export const createService = createAsyncThunk('service/create', async (serviceDa
 
 })
 
+// Delete service
+export const deleteService = createAsyncThunk('service/delete', async (id: string, thunkAPI) => {
+
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res: IServiceDeleteData = await serviceService.deleteService(id, auth.user.data.token)
+    return res.data
+
+  } catch (e) {
+
+    if (axios.isAxiosError(e)){
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+    }
+  }
+
+})
+
 
 export const serviceSlice = createSlice({
   name: 'service',
@@ -98,11 +116,9 @@ export const serviceSlice = createSlice({
       })
       .addCase(getAllServices.pending, (state) => {
         state.loading = true
-        state.error = null
       })
       .addCase(getAllServices.fulfilled, (state, action) => {
         state.loading = false
-        state.error = null
         state.services = action.payload
       })
       .addCase(getAllServices.rejected, (state, action) => {
@@ -125,6 +141,20 @@ export const serviceSlice = createSlice({
       .addCase(createService.rejected, (state, action) => {
         state.loading = false
         state.success = false
+        state.error = action.payload
+      })
+      .addCase(deleteService.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(deleteService.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = null
+        state.service = action.payload
+        state.message = 'Serviço excluído com sucesso.'
+      })
+      .addCase(deleteService.rejected, (state, action) => {
+        state.loading = false
         state.error = action.payload
       })
   },
