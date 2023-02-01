@@ -91,7 +91,7 @@ const ListServices = (): JSX.Element => {
       <h2 className="display-6">Seus serviços</h2>
       <Button variant="primary" onClick={() => setShowModal(true)}>Adicionar Serviço</Button>
     </Col>
-    <Col className="d-flex justify-content-between align-items-center mb-3">
+    <Col className="d-flex justify-content-between align-items-center my-3">
       <p>Abaixo os serviços que você já cadastrou.</p>
       <Form.Select className="w-25" onChange={handleLimit}>
         <option value="10">Itens por página</option>

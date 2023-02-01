@@ -1,7 +1,7 @@
 import Message from "@src/components/Message"
 import { IServiceDataForm } from "@src/interfaces/IService"
 import { RootState } from "@src/store/store"
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { Modal, Button, Form, Col } from "react-bootstrap"
 import { useSelector } from "react-redux"
 
@@ -13,12 +13,19 @@ type Props = {
 
 const AddService = ({ show, hide, handleSubmit }: Props) => {
 
-  const { error } = useSelector((state: RootState) => state.service)
+  const { error, success } = useSelector((state: RootState) => state.service)
 
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [price, setPrice] = useState<string>()
   const [imagePreview, setImagePreview] = useState<File | Blob | MediaSource>()
+
+  useEffect(() => {
+    setName('')
+    setDescription('')
+    setPrice('')
+    setImagePreview(null)
+  }, [success])
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     const img: File | Blob | MediaSource = e.target.files[0]
