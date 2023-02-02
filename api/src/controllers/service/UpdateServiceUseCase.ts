@@ -22,7 +22,8 @@ export const updateServiceUseCase = async ({
   service.name = name
   service.description = description
   service.price = price
-  service.image = image
+
+  image && (service.image = image)
 
   try {
     if (!service.user_id.equals(user_id)) {

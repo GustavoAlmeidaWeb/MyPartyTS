@@ -12,18 +12,15 @@ import { useResetAuthStates } from '@src/hooks/useResetStates'
 import { Col } from "react-bootstrap"
 
 import Loading from '@src/components/Loading'
-import { getAllServices } from '@src/slices/serviceSlice'
 
 const Home = (): JSX.Element => {
 
   const { user, loading } = useSelector((state: RootState) => state.user)
-  const { services } = useSelector((state: RootState) => state.service)
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const resetStates = useResetAuthStates(dispatch)
 
   useEffect(() => {
     dispatch(getUser())
-    dispatch(getAllServices())
   }, [dispatch])
 
   const handleLogout = () => {
@@ -34,9 +31,6 @@ const Home = (): JSX.Element => {
   if(loading) {
     return <Loading />
   }
-
-  // console.log(user)
-  console.log(services)
 
   return (
     <Col md={{ span: 10, offset: 1 }} lg={{ span: 10, offset: 1 }} xl={{ span: 8, offset: 2 }}>

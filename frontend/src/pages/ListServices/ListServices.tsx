@@ -1,17 +1,17 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { AnyAction } from "@reduxjs/toolkit"
-import { createService, deleteService, getAllServices } from "@src/slices/serviceSlice"
+import { createService, deleteService, getAllServices, updateService } from "@src/slices/serviceSlice"
 import { RootState } from "@src/store/store"
 import { ThunkDispatch } from "redux-thunk"
 import { Button, Form, Col } from "react-bootstrap"
 import { useResetServiceStates } from "@src/hooks/useResetStates"
-import { IPageParams, IServiceCreate } from "@src/interfaces/IService"
+import { IPageParams, IServiceCreate, IServiceDataForm } from "@src/interfaces/IService"
 import AddService from "../AddService/AddService"
 import PaginationComponent from "@src/components/PaginationComponent"
 import ListServiceItem from "./ListServiceItem"
-import Loading from "@src/components/Loading"
 import Message from "@src/components/Message"
+import Loading from "@src/components/Loading"
 
 const ListServices = (): JSX.Element => {
 
@@ -25,6 +25,8 @@ const ListServices = (): JSX.Element => {
   const [calc, setCalc] = useState<number[]>([])
   const [pagination, setPagination] = useState<number[]>([])
   const [activePagination, setActivePagination] = useState<number>(1)
+  const [editService, setEditService] = useState<boolean>(false)
+  const [serviceId, setServiceId] = useState<string>('')
 
   const limitPage = {
     limit,
@@ -58,12 +60,22 @@ const ListServices = (): JSX.Element => {
    * Handle Functions
    */
 
-  const handleClose = (): void => setShowModal(false)
+  const handleClose = (): void => {
+    setShowModal(false)
+    setEditService(false)
+  }
 
-  const handleSubmit = async (data: any): Promise<void> => {
+  const handleSubmit = async (data: IServiceDataForm | any): Promise<void> => {
     const formData: FormData = new FormData()
     Object.keys(data).forEach((key: any) => formData.append(key, data[key]))
     await dispatch(createService(formData))
+    resetStates()
+  }
+
+  const handleUpdate = async (data: IServiceDataForm | any): Promise<void> => {
+    const formData: FormData = new FormData()
+    Object.keys(data).forEach((key: any) => formData.append(key, data[key]))
+    await dispatch(updateService(formData))
     resetStates()
   }
 
@@ -84,9 +96,15 @@ const ListServices = (): JSX.Element => {
     resetStates()
   }
 
+  const handleEdit = (id: string): void => {
+    setShowModal(true)
+    setEditService(true)
+    setServiceId(id)
+  }
+
   return (
     <>
-    <AddService show={showModal} hide={handleClose} handleSubmit={handleSubmit} />
+    <AddService show={showModal} hide={handleClose} handleSubmit={handleSubmit} handleUpdate={handleUpdate} edit={editService} serviceId={serviceId} />
     <Col className="d-flex justify-content-between align-items-center">
       <h2 className="display-6">Seus serviços</h2>
       <Button variant="primary" onClick={() => setShowModal(true)}>Adicionar Serviço</Button>
@@ -102,17 +120,17 @@ const ListServices = (): JSX.Element => {
     </Col>
     {message && <Message type="success" msg={message}/>}
     {error && <Message type="danger" msg={error}/>}
-    {services && services.data.length > 0 ? (<>
+    {services && services.data && services.data.length > 0 ? (
       <Col as="ul" className="ps-0">
-        {services && services.data && services.data.map((service: IServiceCreate) => (
-          <ListServiceItem service={service} handleDelete={handleDelete} key={service._id} />
+        {services.data.map((service: IServiceCreate) => (
+          <ListServiceItem service={service} handleDelete={handleDelete} handleEdit={handleEdit} key={service._id} />
         ))}
       </Col>
-    </>) : (<>
+    ) : (
       <Col className="my-5">
         <h3 className="text-center">Nenhum serviço cadastrado ainda, adicione um serviço.</h3>
       </Col>
-    </>)}
+    )}
     <Col className="d-flex justify-content-between align-items-center">
       {services && (
         <p className="text-muted">Total de serviços cadastrados: <strong>{services.total}</strong></p>

@@ -1,23 +1,35 @@
-import Message from "@src/components/Message"
-import { IServiceDataForm } from "@src/interfaces/IService"
-import { RootState } from "@src/store/store"
+import { uploads } from "@src/utils/config"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { RootState } from "@src/store/store"
+import { ThunkDispatch } from "redux-thunk"
+import { IServiceDataForm } from "@src/interfaces/IService"
 import { Modal, Button, Form, Col } from "react-bootstrap"
-import { useSelector } from "react-redux"
+import { AnyAction } from "@reduxjs/toolkit"
+import { getService } from "@src/slices/serviceSlice"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faSquareCheck } from "@fortawesome/free-regular-svg-icons"
+import { faFileCirclePlus, faXmark } from "@fortawesome/free-solid-svg-icons"
+import Message from "@src/components/Message"
 
 type Props = {
   show: boolean
+  edit: boolean
+  serviceId?: string
   hide: () => void
   handleSubmit: (data: IServiceDataForm) => void
+  handleUpdate: (data: IServiceDataForm) => void
 }
 
-const AddService = ({ show, hide, handleSubmit }: Props) => {
+const AddService = ({ show, hide, handleSubmit, handleUpdate, edit, serviceId }: Props) => {
 
-  const { error, success } = useSelector((state: RootState) => state.service)
+  const { service, error, success } = useSelector((state: RootState) => state.service)
+  const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
 
   const [name, setName] = useState<string>('')
+  const [price, setPrice] = useState<string>('')
+  const [image, setImage] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [price, setPrice] = useState<string>()
   const [imagePreview, setImagePreview] = useState<File | Blob | MediaSource>()
 
   useEffect(() => {
@@ -26,6 +38,26 @@ const AddService = ({ show, hide, handleSubmit }: Props) => {
     setPrice('')
     setImagePreview(null)
   }, [success])
+
+  useEffect(() => {
+    if(edit) {
+      dispatch(getService(serviceId))
+    } else {
+      setName('')
+      setDescription('')
+      setPrice('')
+      setImagePreview(null)
+    }
+  }, [edit])
+
+  useEffect(() => {
+    if(service) {
+      setName(service.name)
+      setDescription(service.description)
+      setPrice(service.price)
+      setImage(service.image)
+    }
+  }, [service])
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     const img: File | Blob | MediaSource = e.target.files[0]
@@ -45,22 +77,41 @@ const AddService = ({ show, hide, handleSubmit }: Props) => {
       serviceData.image = imagePreview
     }
 
-    handleSubmit(serviceData)
-
+    if(edit) {
+      serviceData._id = serviceId
+      handleUpdate(serviceData)
+    } else {
+      handleSubmit(serviceData)
+    }
   }
 
   return (
     <Modal show={show} onHide={hide} dialogClassName="modal-70w">
       <Modal.Header closeButton>
-        <Modal.Title>Adicionar Serviço</Modal.Title>
+        <Modal.Title as="h3">
+          {!edit ? ('Adicionar Serviço') : ('Atualizar Serviço')}
+        </Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleData}>
         <Modal.Body>
           <Col className='text-center mb-3'>
-            {(imagePreview) ? (<>
-              <img className='rounded w-25' src={URL.createObjectURL(imagePreview)} alt={name} />
-            </>) : (<>
-              <img className='rounded w-25' src='https://via.placeholder.com/250' alt={name} />
+            {!edit && (<>
+              {imagePreview ? (
+                <img className='rounded w-25' src={URL.createObjectURL(imagePreview)} alt={name} />
+              ) : (
+                <img className='rounded w-25' src='https://via.placeholder.com/250' alt={name} />
+              )}
+            </>)}
+            {edit && (<>
+              {!imagePreview ? (<>
+                {image ? (
+                  <img className='rounded w-25' src={`${uploads}/services/${image}`} alt={name} />
+                ) : (
+                  <img className='rounded w-25' src='https://via.placeholder.com/250' alt={name} />
+                )}
+              </>) : (
+                <img className='rounded w-25' src={URL.createObjectURL(imagePreview)} alt={name} />
+              )}
             </>)}
           </Col>
           <Form.Group className="mb-3">
@@ -82,11 +133,13 @@ const AddService = ({ show, hide, handleSubmit }: Props) => {
           {error && <Message type="danger" msg={error} />}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={hide} >
-            Fechar
-          </Button>
+          <Button variant="secondary" onClick={hide}><FontAwesomeIcon icon={faXmark} /> Fechar</Button>
           <Button type="submit" variant="primary">
-            Cadastrar
+            {!edit ? (<>
+              <FontAwesomeIcon icon={faFileCirclePlus} /> Cadastrar
+            </>) : (<>
+              <FontAwesomeIcon icon={faSquareCheck} /> Atualizar
+            </>)}
           </Button>
         </Modal.Footer>
       </Form>

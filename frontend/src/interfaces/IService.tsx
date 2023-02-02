@@ -45,6 +45,7 @@ export interface IServiceDataForm {
   name: string
   description: string
   price: number
+  _id?: string
   image?: File | Blob | MediaSource
 }
 

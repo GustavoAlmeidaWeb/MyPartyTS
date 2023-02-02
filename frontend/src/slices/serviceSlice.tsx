@@ -67,6 +67,24 @@ export const createService = createAsyncThunk('service/create', async (serviceDa
 
 })
 
+// Create a service
+export const updateService = createAsyncThunk('service/update', async (serviceData: FormData, thunkAPI) => {
+
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res = await serviceService.updateService(serviceData, auth.user.data.token)
+    return res.data
+
+  } catch (e) {
+
+    if (axios.isAxiosError(e)){
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+    }
+  }
+
+})
+
 // Delete service
 export const deleteService = createAsyncThunk('service/delete', async (id: string, thunkAPI) => {
 
@@ -84,7 +102,6 @@ export const deleteService = createAsyncThunk('service/delete', async (id: strin
   }
 
 })
-
 
 export const serviceSlice = createSlice({
   name: 'service',
@@ -110,7 +127,6 @@ export const serviceSlice = createSlice({
       })
       .addCase(getService.rejected, (state, action) => {
         state.loading = false
-        state.success = false
         state.error = action.payload
         state.service = {}
       })
@@ -141,6 +157,21 @@ export const serviceSlice = createSlice({
       .addCase(createService.rejected, (state, action) => {
         state.loading = false
         state.success = false
+        state.error = action.payload
+      })
+      .addCase(updateService.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(updateService.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = null
+        state.success = true
+        state.service = action.payload
+        state.message = 'Serviço atualizado com sucesso.'
+      })
+      .addCase(updateService.rejected, (state, action) => {
+        state.loading = false
         state.error = action.payload
       })
       .addCase(deleteService.pending, (state) => {

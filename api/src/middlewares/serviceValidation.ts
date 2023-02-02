@@ -1,4 +1,4 @@
-import { body, check } from 'express-validator'
+import { body } from 'express-validator'
 import { ValidationChain } from 'express-validator/src/chain'
 
 export const serviceCreateValidation = (): ValidationChain[] => {
@@ -42,11 +42,5 @@ export const serviceUpdateValidation = (): ValidationChain[] => {
       .withMessage('O preço do serviço é obrigatório.')
       .isNumeric()
       .withMessage('O preço do serviço deve ser números.'),
-    check('image').custom((value, { req }) => {
-      if (!req.file) {
-        throw new Error('A imagem é um campo obrigatório.')
-      }
-      return true
-    }),
   ]
 }

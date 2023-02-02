@@ -62,9 +62,10 @@ export const serviceController = {
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
-      image: req.file.filename,
       user_id: req.user._id,
     }
+
+    req.file && (data.image = req.file.filename)
 
     const service = await updateServiceUseCase(data)
 

@@ -19,6 +19,12 @@ const createService = async (data: FormData, token: string) => {
   return res
 }
 
+const updateService = async (data: FormData, token: string) => {
+  setTokenHeaders(token)
+  const res: IServiceCreateData = await api.put(`/services/${data.get('_id')}`, data)
+  return res
+}
+
 const deleteService = async (id: string, token: string): Promise<IServiceDeleteData> => {
   setTokenHeaders(token)
   const res: IServiceDeleteData = await api.delete(`/services/${id}`)
@@ -29,6 +35,7 @@ const serviceService = {
   getService,
   getAllServices,
   createService,
+  updateService,
   deleteService,
 }
 

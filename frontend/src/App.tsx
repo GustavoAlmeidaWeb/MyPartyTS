@@ -23,7 +23,7 @@ function App() {
     <>
     <Navigation auth={auth} />
     <Container as="main" className="app" fluid>
-      <Container>
+      <Container as="section">
         <Routes>
           <Route path='/' element={auth ? <Home /> : <Navigate to="/login" />} />
           <Route path='/minha-conta' element={auth ? <MyAccount /> : <Navigate to="/login" />} />

@@ -47,14 +47,14 @@ const MyAccount = (): JSX.Element => {
   }, [user])
 
   // Get image from file input change
-  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     // Image preview
     const img: File | Blob | MediaSource = e.target.files[0]
     setPreviewImage(img)
   }
 
   // Password change event
-  const handleSwitch = () => {
+  const handleSwitch = (): void => {
     if(changePass) {
       setChangePass(false)
       setCurrentPass('')
