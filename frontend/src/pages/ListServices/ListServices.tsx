@@ -61,8 +61,8 @@ const ListServices = (): JSX.Element => {
    */
 
   const handleClose = (): void => {
-    setShowModal(false)
     setEditService(false)
+    setShowModal(false)
   }
 
   const handleSubmit = async (data: IServiceDataForm | any): Promise<void> => {
@@ -102,12 +102,17 @@ const ListServices = (): JSX.Element => {
     setServiceId(id)
   }
 
+  const handleAddService = () => {
+    setEditService(false)
+    setShowModal(true)
+  }
+
   return (
     <>
     <AddService show={showModal} hide={handleClose} handleSubmit={handleSubmit} handleUpdate={handleUpdate} edit={editService} serviceId={serviceId} />
     <Col className="d-flex justify-content-between align-items-center">
       <h2 className="display-6">Seus serviços</h2>
-      <Button variant="primary" onClick={() => setShowModal(true)}>Adicionar Serviço</Button>
+      <Button variant="primary" onClick={handleAddService}>Adicionar Serviço</Button>
     </Col>
     <Col className="d-flex justify-content-between align-items-center my-3">
       <p>Abaixo os serviços que você já cadastrou.</p>

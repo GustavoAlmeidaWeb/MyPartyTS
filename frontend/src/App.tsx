@@ -14,6 +14,7 @@ import Register from "@src/pages/Auth/Register"
 import MyAccount from "@src/pages/MyAccount/MyAccount"
 import ListServices from "@src/pages/ListServices/ListServices"
 import ListParties from "@src/pages/ListParties/ListParties"
+import PartyItem from "@src/pages/ListParties/PartyItem"
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
           <Route path='/minha-conta' element={auth ? <MyAccount /> : <Navigate to="/login" />} />
           <Route path='/servicos' element={auth ? <ListServices /> : <Navigate to="/login" />} />
           <Route path='/festas' element={auth ? <ListParties /> : <Navigate to="/login" />} />
+          <Route path='/festa/:id' element={auth ? <PartyItem /> : <Navigate to="/login" />} />
           <Route path='/login' element={!auth ? <Login /> : <Navigate to="/" />} />
           <Route path='/cadastro' element={!auth ? <Register /> : <Navigate to="/" />} />
           <Route path='*' element={<Home />} />

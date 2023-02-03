@@ -33,31 +33,32 @@ const AddService = ({ show, hide, handleSubmit, handleUpdate, edit, serviceId }:
   const [imagePreview, setImagePreview] = useState<File | Blob | MediaSource>()
 
   useEffect(() => {
-    setName('')
-    setDescription('')
-    setPrice('')
-    setImagePreview(null)
+    cleanInputs()
   }, [success])
 
   useEffect(() => {
     if(edit) {
       dispatch(getService(serviceId))
     } else {
-      setName('')
-      setDescription('')
-      setPrice('')
-      setImagePreview(null)
+      cleanInputs()
     }
   }, [edit])
 
   useEffect(() => {
-    if(service) {
+    if(service && edit) {
       setName(service.name)
       setDescription(service.description)
       setPrice(service.price)
       setImage(service.image)
     }
   }, [service])
+
+  const cleanInputs = (): void => {
+    setName('')
+    setDescription('')
+    setPrice('')
+    setImagePreview(null)
+  }
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     const img: File | Blob | MediaSource = e.target.files[0]

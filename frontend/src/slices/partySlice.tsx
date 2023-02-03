@@ -3,6 +3,7 @@ import { RootState } from "@src/store/store"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { PartyInitialInterface } from "@src/interfaces/IParty"
 import partyService from "@src/services/partyService"
+import { IPageParams } from "@src/interfaces/IService"
 
 const initialState = {
   party: {},
@@ -32,11 +33,11 @@ export const getParty = createAsyncThunk('party/get', async (id: string, thunkAP
 })
 
 // Get all parties
-export const getAllParties = createAsyncThunk('party/getAll', async (_, thunkAPI) => {
+export const getAllParties = createAsyncThunk('party/getAll', async (params: IPageParams, thunkAPI) => {
 
   try {
     const { auth }: RootState = thunkAPI.getState()
-    const res = await partyService.getAllParties(auth.user.data.token)
+    const res = await partyService.getAllParties(auth.user.data.token, params)
     return res.data
 
   } catch (e) {
@@ -90,7 +91,6 @@ export const partySlice = createSlice({
         state.success = true
         state.error = null
         state.parties = action.payload
-        console.log(action.payload)
       })
       .addCase(getAllParties.rejected, (state, action) => {
         state.loading = false

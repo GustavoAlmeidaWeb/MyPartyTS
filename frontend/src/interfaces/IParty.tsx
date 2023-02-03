@@ -9,6 +9,7 @@ export interface IPartyCreate {
   user_id: string
   services: IServiceCreate[]
   image?: string
+  _id?: string
 }
 
 export interface IPartyCreateData {

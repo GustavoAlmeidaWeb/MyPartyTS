@@ -1,6 +1,6 @@
 import { uploads } from "@src/utils/config"
 import { IServiceCreate } from "@src/interfaces/IService"
-import { Button, Card, Col, Image } from "react-bootstrap"
+import { Badge, Button, Card, Col, Image } from "react-bootstrap"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons"
@@ -24,7 +24,12 @@ const ListServiceItem = ({ service, handleDelete, handleEdit }: Props): JSX.Elem
           )}
         </Col>
         <Col md={{ span: 8 }} sm={{ span: 7 }} xs={{ span: 7 }} className="ps-3 pe-2">
-          <Card.Title as="h3">{service.name}</Card.Title>
+          <Card.Title className="d-flex align-items-center" as="h3">
+            {service.name}
+            <Badge className="fs-6 ms-1" bg="dark">
+              {service.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            </Badge>
+          </Card.Title>
           <Card.Text>{service.description}</Card.Text>
           <Col className="d-flex justify-content-between">
             <Button variant="primary" onClick={() => handleEdit(service._id)}><FontAwesomeIcon icon={faPencil} /> Editar</Button>
