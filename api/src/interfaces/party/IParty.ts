@@ -7,6 +7,8 @@ export interface ICreateParty {
   author: string
   description: string
   budget: number
+  date: string
+  hour: string
   image?: string
   services?: ICreateService[]
 }

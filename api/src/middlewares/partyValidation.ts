@@ -1,4 +1,4 @@
-import { body, check } from 'express-validator'
+import { body } from 'express-validator'
 import { ValidationChain } from 'express-validator/src/chain'
 
 export const createPartyValidation = (): ValidationChain[] => {
@@ -23,15 +23,21 @@ export const createPartyValidation = (): ValidationChain[] => {
       .withMessage('A orçamento da festa é obrigatória.')
       .isNumeric()
       .withMessage('Por favor digite um valor válido.'),
+    body('date')
+      .notEmpty()
+      .withMessage('A data do evento é obrigatória.')
+      .isDate()
+      .withMessage('Por favor, digite uma data válida.'),
+    body('hour').notEmpty().withMessage('A hora do evento é obrigatória.'),
     body('services')
       .notEmpty()
       .withMessage('Por favor adicione serviços a sua festa.'),
-    check('image').custom((value, { req }) => {
-      if (!req.file) {
-        throw new Error('A imagem da festa é obrigatório.')
-      }
-      return true
-    }),
+    // check('image').custom((value, { req }) => {
+    //   if (!req.file) {
+    //     throw new Error('A imagem da festa é obrigatório.')
+    //   }
+    //   return true
+    // }),
   ]
 }
 

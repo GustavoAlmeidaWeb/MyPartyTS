@@ -9,6 +9,8 @@ const partySchema: mongoose.Schema<ICreateParty> = new Schema(
     description: String,
     budget: Number,
     image: String,
+    date: String,
+    hour: String,
     user_id: Types.ObjectId,
     services: [serviceSchema],
   },

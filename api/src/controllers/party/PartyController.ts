@@ -18,6 +18,8 @@ export const partyController = {
       description: req.body.description,
       budget: req.body.budget,
       services: req.body.services,
+      date: req.body.date,
+      hour: req.body.hour,
       user_id: req.user._id,
     } as ICreateParty
 

@@ -2,7 +2,7 @@ import { Modal, Button, Form, Col } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { uploads } from '@src/utils/config'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@src/store/store'
 import Message from '@src/components/Message'
@@ -22,12 +22,20 @@ const AddParty = ({ show, hide, editParty }: Props) => {
   const [budget, setBudget] = useState<number>()
   const [description, setDescription] = useState<string>('')
   const [author, setAuthor] = useState<string>('')
+  const [eventDate, setEventDate] = useState<string>('')
+  const [eventHour, setEventHour] = useState<string>('')
 
-  const handleData = () => {}
+  const handleData = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault()
+    console.log(eventDate)
+    console.log(eventHour)
+  }
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     setImagePreview(e.target.files[0])
   }
+
+  console.log(new Date().toISOString().split('T')[0])
 
   return (
     <Modal show={show} onHide={hide} dialogClassName="modal-70w">
@@ -117,6 +125,23 @@ const AddParty = ({ show, hide, editParty }: Props) => {
               type="number"
               value={budget || ''}
               onChange={e => setBudget(Number(e.target.value))}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Data do Evento</Form.Label>
+            <Form.Control
+              type="date"
+              value={eventDate || ''}
+              onChange={e => setEventDate(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Hora do Evento</Form.Label>
+            <Form.Control
+              type="time"
+              value={eventHour || ''}
+              onChange={e => setEventHour(e.target.value)}
             />
           </Form.Group>
           {error && <Message type="danger" msg={error} />}
