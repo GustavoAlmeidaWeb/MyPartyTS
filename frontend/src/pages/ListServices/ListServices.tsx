@@ -1,21 +1,31 @@
-import { ChangeEvent, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { AnyAction } from "@reduxjs/toolkit"
-import { createService, deleteService, getAllServices, updateService } from "@src/slices/serviceSlice"
-import { RootState } from "@src/store/store"
-import { ThunkDispatch } from "redux-thunk"
-import { Button, Form, Col } from "react-bootstrap"
-import { useResetServiceStates } from "@src/hooks/useResetStates"
-import { IPageParams, IServiceCreate, IServiceDataForm } from "@src/interfaces/IService"
-import AddService from "../AddService/AddService"
-import PaginationComponent from "@src/components/PaginationComponent"
-import ListServiceItem from "./ListServiceItem"
-import Message from "@src/components/Message"
-import Loading from "@src/components/Loading"
+import { ChangeEvent, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AnyAction } from '@reduxjs/toolkit'
+import {
+  createService,
+  deleteService,
+  getAllServices,
+  updateService,
+} from '@src/slices/serviceSlice'
+import { RootState } from '@src/store/store'
+import { ThunkDispatch } from 'redux-thunk'
+import { Button, Form, Col } from 'react-bootstrap'
+import { useResetServiceStates } from '@src/hooks/useResetStates'
+import {
+  IPageParams,
+  IServiceCreate,
+  IServiceDataForm,
+} from '@src/interfaces/IService'
+import AddService from '../AddService/AddService'
+import PaginationComponent from '@src/components/PaginationComponent'
+import ListServiceItem from './ListServiceItem'
+import Message from '@src/components/Message'
+import Loading from '@src/components/Loading'
 
 const ListServices = (): JSX.Element => {
-
-  const { services, loading, success, message, error } = useSelector((state: RootState) => state.service)
+  const { services, loading, success, message, error } = useSelector(
+    (state: RootState) => state.service,
+  )
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const resetStates = useResetServiceStates(dispatch)
 
@@ -42,8 +52,8 @@ const ListServices = (): JSX.Element => {
   }, [dispatch, limit, page])
 
   useEffect(() => {
-    if(services) {
-      for(let i = 1; i <= Math.ceil(services.total / services.per_page); i++) {
+    if (services) {
+      for (let i = 1; i <= Math.ceil(services.total / services.per_page); i++) {
         pagination.push(i)
       }
       setCalc([...pagination])
@@ -109,39 +119,61 @@ const ListServices = (): JSX.Element => {
 
   return (
     <>
-    <AddService show={showModal} hide={handleClose} handleSubmit={handleSubmit} handleUpdate={handleUpdate} edit={editService} serviceId={serviceId} />
-    <Col className="d-flex justify-content-between align-items-center">
-      <h2 className="display-6">Seus serviços</h2>
-      <Button variant="primary" onClick={handleAddService}>Adicionar Serviço</Button>
-    </Col>
-    <Col className="d-flex justify-content-between align-items-center my-3">
-      <p>Abaixo os serviços que você já cadastrou.</p>
-      <Form.Select className="w-25" onChange={handleLimit}>
-        <option value="10">Itens por página</option>
-        <option value="20">20 Itens</option>
-        <option value="15">15 Itens</option>
-        <option value="10">10 Itens</option>
-      </Form.Select>
-    </Col>
-    {message && <Message type="success" msg={message}/>}
-    {error && <Message type="danger" msg={error}/>}
-    {services && services.data && services.data.length > 0 ? (
-      <Col as="ul" className="ps-0">
-        {services.data.map((service: IServiceCreate) => (
-          <ListServiceItem service={service} handleDelete={handleDelete} handleEdit={handleEdit} key={service._id} />
-        ))}
+      <AddService
+        show={showModal}
+        hide={handleClose}
+        handleSubmit={handleSubmit}
+        handleUpdate={handleUpdate}
+        edit={editService}
+        serviceId={serviceId}
+      />
+      <Col className="d-flex justify-content-between align-items-center">
+        <h2 className="display-6">Seus serviços</h2>
+        <Button variant="primary" onClick={handleAddService}>
+          Adicionar Serviço
+        </Button>
       </Col>
-    ) : (
-      <Col className="my-5">
-        <h3 className="text-center">Nenhum serviço cadastrado ainda, adicione um serviço.</h3>
+      <Col className="d-flex justify-content-between align-items-center my-3">
+        <p>Abaixo os serviços que você já cadastrou.</p>
+        <Form.Select className="w-25" onChange={handleLimit}>
+          <option value="10">Itens por página</option>
+          <option value="20">20 Itens</option>
+          <option value="15">15 Itens</option>
+          <option value="10">10 Itens</option>
+        </Form.Select>
       </Col>
-    )}
-    <Col className="d-flex justify-content-between align-items-center">
-      {services && (
-        <p className="text-muted">Total de serviços cadastrados: <strong>{services.total}</strong></p>
+      {message && <Message type="success" msg={message} />}
+      {error && <Message type="danger" msg={error} />}
+      {services && services.data && services.data.length > 0 ? (
+        <Col as="ul" className="ps-0">
+          {services.data.map((service: IServiceCreate) => (
+            <ListServiceItem
+              service={service}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+              key={service._id}
+            />
+          ))}
+        </Col>
+      ) : (
+        <Col className="my-5">
+          <h3 className="text-center">
+            Nenhum serviço cadastrado ainda, adicione um serviço.
+          </h3>
+        </Col>
       )}
-      <PaginationComponent pages={calc} activePagination={activePagination} handlePage={handlePage} />
-    </Col>
+      <Col className="d-flex justify-content-between align-items-center">
+        {services && (
+          <p className="text-muted">
+            Total de serviços cadastrados: <strong>{services.total}</strong>
+          </p>
+        )}
+        <PaginationComponent
+          pages={calc}
+          activePagination={activePagination}
+          handlePage={handlePage}
+        />
+      </Col>
     </>
   )
 }

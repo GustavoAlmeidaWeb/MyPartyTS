@@ -8,25 +8,22 @@ type AuthResponse = {
 }
 
 export const useAuth = (): AuthResponse => {
-
   const { user } = useSelector((state: RootState) => state.auth)
   const [auth, setAuth] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-
-      if(user){
-        if(user.data) {
-          setAuth(true)
-        } else {
-          setAuth(false)
-        }
+    if (user) {
+      if (user.data) {
+        setAuth(true)
       } else {
         setAuth(false)
       }
+    } else {
+      setAuth(false)
+    }
 
-      setLoading(false)
-
+    setLoading(false)
   }, [user])
 
   return { auth, loading }

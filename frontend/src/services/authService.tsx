@@ -1,6 +1,6 @@
-import { IUserLogin, IUserRegister } from "../interfaces/IUser"
-import { LoginType, RegisterType } from "../@types/UserTypes"
-import { api } from "../utils/config"
+import { IUserLogin, IUserRegister } from '../interfaces/IUser'
+import { LoginType, RegisterType } from '../@types/UserTypes'
+import { api } from '../utils/config'
 
 const register = async (data: RegisterType): Promise<IUserRegister> => {
   const res: IUserRegister = await api.post('/users/register', data)

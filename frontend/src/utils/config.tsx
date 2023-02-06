@@ -7,5 +7,5 @@ export const api: AxiosInstance = axios.create({
 })
 
 export const setTokenHeaders = (token: string): void => {
-  api.defaults.headers['Authorization'] = `Bearer ${token}`;
+  api.defaults.headers['Authorization'] = `Bearer ${token}`
 }

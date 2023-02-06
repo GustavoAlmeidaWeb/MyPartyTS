@@ -1,5 +1,5 @@
-import { Alert } from "react-bootstrap"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Alert } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type Props = {
   type: string
@@ -9,15 +9,15 @@ type Props = {
 const Message = ({ type, msg }: Props): JSX.Element => {
   return (
     <Alert variant={type} className="mt-3">
-        {type === 'success' ? (
-          <>
+      {type === 'success' ? (
+        <>
           <FontAwesomeIcon icon="check" /> {msg}
-          </>
-        ) : (
-          <>
+        </>
+      ) : (
+        <>
           <FontAwesomeIcon icon="triangle-exclamation" /> {msg}
-          </>
-        )}
+        </>
+      )}
     </Alert>
   )
 }

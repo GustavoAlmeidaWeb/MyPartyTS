@@ -1,9 +1,9 @@
-import axios from "axios"
-import { RootState } from "@src/store/store"
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { PartyInitialInterface } from "@src/interfaces/IParty"
-import partyService from "@src/services/partyService"
-import { IPageParams } from "@src/interfaces/IService"
+import axios from 'axios'
+import { RootState } from '@src/store/store'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PartyInitialInterface } from '@src/interfaces/IParty'
+import partyService from '@src/services/partyService'
+import { IPageParams } from '@src/interfaces/IService'
 
 const initialState = {
   party: {},
@@ -15,56 +15,53 @@ const initialState = {
 } as PartyInitialInterface
 
 // Get a party
-export const getParty = createAsyncThunk('party/get', async (id: string, thunkAPI) => {
-
-  try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await partyService.getParty(id, auth.user.data.token)
-    return res.data
-
-  } catch (e) {
-
-    if (axios.isAxiosError(e)){
-      // Check for errors
-      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+export const getParty = createAsyncThunk(
+  'party/get',
+  async (id: string, thunkAPI) => {
+    try {
+      const { auth }: RootState = thunkAPI.getState()
+      const res = await partyService.getParty(id, auth.user.data.token)
+      return res.data
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        // Check for errors
+        return thunkAPI.rejectWithValue(e.response.data.errors[0])
+      }
     }
-  }
-
-})
+  },
+)
 
 // Get all parties
-export const getAllParties = createAsyncThunk('party/getAll', async (params: IPageParams, thunkAPI) => {
-
-  try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await partyService.getAllParties(auth.user.data.token, params)
-    return res.data
-
-  } catch (e) {
-
-    if (axios.isAxiosError(e)){
-      // Check for errors
-      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+export const getAllParties = createAsyncThunk(
+  'party/getAll',
+  async (params: IPageParams, thunkAPI) => {
+    try {
+      const { auth }: RootState = thunkAPI.getState()
+      const res = await partyService.getAllParties(auth.user.data.token, params)
+      return res.data
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        // Check for errors
+        return thunkAPI.rejectWithValue(e.response.data.errors[0])
+      }
     }
-  }
-
-})
-
+  },
+)
 
 export const partySlice = createSlice({
   name: 'party',
   initialState,
   reducers: {
-    resetPartyStates: (state) => {
+    resetPartyStates: state => {
       state.loading = false
       state.error = null
       state.success = false
       state.message = null
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(getParty.pending, (state) => {
+      .addCase(getParty.pending, state => {
         state.loading = true
         state.success = false
         state.error = null
@@ -81,7 +78,7 @@ export const partySlice = createSlice({
         state.error = action.payload
         state.party = {}
       })
-      .addCase(getAllParties.pending, (state) => {
+      .addCase(getAllParties.pending, state => {
         state.loading = true
         state.success = false
         state.error = null

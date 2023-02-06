@@ -1,8 +1,8 @@
-import axios from "axios"
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { AuthInitialType } from "@src/@types/UserTypes"
-import { RootState } from "@src/store/store"
-import userService from "@src/services/userService"
+import axios from 'axios'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AuthInitialType } from '@src/@types/UserTypes'
+import { RootState } from '@src/store/store'
+import userService from '@src/services/userService'
 
 const initialState = {
   user: {},
@@ -14,72 +14,66 @@ const initialState = {
 
 // Get current user
 export const getUser = createAsyncThunk('user/get', async (_, thunkAPI) => {
-
   try {
     const { auth }: RootState = thunkAPI.getState()
     const res = await userService.getUser(auth.user.data.token)
     return res
-
   } catch (e) {
-
-    if (axios.isAxiosError(e)){
+    if (axios.isAxiosError(e)) {
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
   }
-
 })
 
 // Update user
-export const updateUser = createAsyncThunk('user/update', async (userData: FormData, thunkAPI) => {
-
-  try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await userService.updateUser(auth.user.data.token, userData)
-    return res
-
-  } catch (e) {
-
-    if (axios.isAxiosError(e)){
-      // Check for errors
-      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+export const updateUser = createAsyncThunk(
+  'user/update',
+  async (userData: FormData, thunkAPI) => {
+    try {
+      const { auth }: RootState = thunkAPI.getState()
+      const res = await userService.updateUser(auth.user.data.token, userData)
+      return res
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        // Check for errors
+        return thunkAPI.rejectWithValue(e.response.data.errors[0])
+      }
     }
-  }
-
-})
+  },
+)
 
 // Delete user
-export const deleteUser = createAsyncThunk('user/delete', async (_, thunkAPI) => {
-
-  try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await userService.deleteUser(auth.user.data.token)
-    return res
-
-  } catch (e) {
-
-    if (axios.isAxiosError(e)){
-      // Check for errors
-      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+export const deleteUser = createAsyncThunk(
+  'user/delete',
+  async (_, thunkAPI) => {
+    try {
+      const { auth }: RootState = thunkAPI.getState()
+      const res = await userService.deleteUser(auth.user.data.token)
+      return res
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        // Check for errors
+        return thunkAPI.rejectWithValue(e.response.data.errors[0])
+      }
     }
-  }
-
-})
+  },
+)
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    resetUserStates: (state) => {
+    resetUserStates: state => {
       state.loading = false
       state.error = null
       state.success = false
       state.message = null
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(getUser.pending, (state) => {
+      .addCase(getUser.pending, state => {
         state.loading = true
         state.success = false
         state.error = null
@@ -96,7 +90,7 @@ export const userSlice = createSlice({
         state.error = action.payload
         state.user = {}
       })
-      .addCase(updateUser.pending, (state) => {
+      .addCase(updateUser.pending, state => {
         state.loading = true
         state.success = false
         state.error = null
@@ -113,12 +107,12 @@ export const userSlice = createSlice({
         state.success = false
         state.error = action.payload
       })
-      .addCase(deleteUser.pending, (state) => {
+      .addCase(deleteUser.pending, state => {
         state.loading = true
         state.success = false
         state.error = null
       })
-      .addCase(deleteUser.fulfilled, (state) => {
+      .addCase(deleteUser.fulfilled, state => {
         state.loading = false
         state.success = true
         state.error = null

@@ -1,4 +1,4 @@
-import { IUserLogin, IUserRegister } from "@src/interfaces/IUser"
+import { IUserLogin, IUserRegister } from '@src/interfaces/IUser'
 import { PayloadAction } from '@reduxjs/toolkit'
 
 /*

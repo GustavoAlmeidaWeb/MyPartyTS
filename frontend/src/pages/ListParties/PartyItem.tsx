@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { RootState } from '@src/store/store'
 import { AnyAction } from '@reduxjs/toolkit'
@@ -10,7 +10,6 @@ import Loading from '@src/components/Loading'
 type Props = {}
 
 const PartyItem = (props: Props) => {
-
   const { party, loading } = useSelector((state: RootState) => state.party)
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const { id } = useParams()
@@ -21,13 +20,11 @@ const PartyItem = (props: Props) => {
 
   console.log(party)
 
-  if(loading) {
+  if (loading) {
     return <Loading />
   }
 
-  return (
-    <div>PartyItem</div>
-  )
+  return <div>PartyItem</div>
 }
 
 export default PartyItem

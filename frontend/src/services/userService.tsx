@@ -1,5 +1,5 @@
-import { IUserRegister } from "../interfaces/IUser"
-import { api, setTokenHeaders } from "../utils/config"
+import { IUserRegister } from '../interfaces/IUser'
+import { api, setTokenHeaders } from '../utils/config'
 
 const getUser = async (token: string): Promise<IUserRegister> => {
   setTokenHeaders(token)
@@ -7,7 +7,10 @@ const getUser = async (token: string): Promise<IUserRegister> => {
   return res
 }
 
-const updateUser = async (token: string, updateUser: FormData): Promise<IUserRegister> => {
+const updateUser = async (
+  token: string,
+  updateUser: FormData,
+): Promise<IUserRegister> => {
   setTokenHeaders(token)
   const res: IUserRegister = await api.put('/users/update', updateUser)
   return res

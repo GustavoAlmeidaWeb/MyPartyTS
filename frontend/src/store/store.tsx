@@ -8,15 +8,16 @@ import serviceReducer from '@src/slices/serviceSlice'
 import partyReducer from '@src/slices/partySlice'
 
 export const store: Store = configureStore({
-    reducer: {
-      auth: authReducer,
-      user: userReducer,
-      service: serviceReducer,
-      party: partyReducer,
-    },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+  reducer: {
+    auth: authReducer,
+    user: userReducer,
+    service: serviceReducer,
+    party: partyReducer,
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(thunkMiddleware)
+    }).concat(thunkMiddleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>
