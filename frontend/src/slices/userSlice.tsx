@@ -27,38 +27,32 @@ export const getUser = createAsyncThunk('user/get', async (_, thunkAPI) => {
 })
 
 // Update user
-export const updateUser = createAsyncThunk(
-  'user/update',
-  async (userData: FormData, thunkAPI) => {
-    try {
-      const { auth }: RootState = thunkAPI.getState()
-      const res = await userService.updateUser(auth.user.data.token, userData)
-      return res
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        // Check for errors
-        return thunkAPI.rejectWithValue(e.response.data.errors[0])
-      }
+export const updateUser = createAsyncThunk('user/update', async (userData: FormData, thunkAPI) => {
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res = await userService.updateUser(auth.user.data.token, userData)
+    return res
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
-  },
-)
+  }
+})
 
 // Delete user
-export const deleteUser = createAsyncThunk(
-  'user/delete',
-  async (_, thunkAPI) => {
-    try {
-      const { auth }: RootState = thunkAPI.getState()
-      const res = await userService.deleteUser(auth.user.data.token)
-      return res
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        // Check for errors
-        return thunkAPI.rejectWithValue(e.response.data.errors[0])
-      }
+export const deleteUser = createAsyncThunk('user/delete', async (_, thunkAPI) => {
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res = await userService.deleteUser(auth.user.data.token)
+    return res
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
-  },
-)
+  }
+})
 
 export const userSlice = createSlice({
   name: 'user',

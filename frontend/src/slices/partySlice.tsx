@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { RootState } from '@src/store/store'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { PartyInitialInterface } from '@src/interfaces/IParty'
-import partyService from '@src/services/partyService'
+import { IPartyCreate, PartyInitialInterface } from '@src/interfaces/IParty'
 import { IPageParams } from '@src/interfaces/IService'
+import partyService from '@src/services/partyService'
 
 const initialState = {
   party: {},
@@ -15,38 +15,46 @@ const initialState = {
 } as PartyInitialInterface
 
 // Get a party
-export const getParty = createAsyncThunk(
-  'party/get',
-  async (id: string, thunkAPI) => {
-    try {
-      const { auth }: RootState = thunkAPI.getState()
-      const res = await partyService.getParty(id, auth.user.data.token)
-      return res.data
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        // Check for errors
-        return thunkAPI.rejectWithValue(e.response.data.errors[0])
-      }
+export const getParty = createAsyncThunk('party/get', async (id: string, thunkAPI) => {
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res = await partyService.getParty(id, auth.user.data.token)
+    return res.data
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
-  },
-)
+  }
+})
 
 // Get all parties
-export const getAllParties = createAsyncThunk(
-  'party/getAll',
-  async (params: IPageParams, thunkAPI) => {
-    try {
-      const { auth }: RootState = thunkAPI.getState()
-      const res = await partyService.getAllParties(auth.user.data.token, params)
-      return res.data
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        // Check for errors
-        return thunkAPI.rejectWithValue(e.response.data.errors[0])
-      }
+export const getAllParties = createAsyncThunk('party/getAll', async (params: IPageParams, thunkAPI) => {
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res = await partyService.getAllParties(auth.user.data.token, params)
+    return res.data
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
-  },
-)
+  }
+})
+
+// Get all parties
+export const createParty = createAsyncThunk('party/create', async (partyData: FormData, thunkAPI) => {
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res = await partyService.createParty(partyData, auth.user.data.token)
+    return res.data
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+    }
+  }
+})
 
 export const partySlice = createSlice({
   name: 'party',
@@ -80,20 +88,33 @@ export const partySlice = createSlice({
       })
       .addCase(getAllParties.pending, state => {
         state.loading = true
-        state.success = false
         state.error = null
       })
       .addCase(getAllParties.fulfilled, (state, action) => {
         state.loading = false
-        state.success = true
         state.error = null
         state.parties = action.payload
       })
       .addCase(getAllParties.rejected, (state, action) => {
         state.loading = false
-        state.success = false
         state.error = action.payload
         state.parties = {}
+      })
+      .addCase(createParty.pending, state => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(createParty.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = null
+        state.success = true
+        state.party = action.payload
+        state.message = 'Festa cadastrada com sucesso.'
+      })
+      .addCase(createParty.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+        state.party = {}
       })
   },
 })

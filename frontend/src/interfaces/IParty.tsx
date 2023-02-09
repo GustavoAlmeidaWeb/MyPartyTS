@@ -6,9 +6,9 @@ export interface IPartyCreate {
   author: string
   description: string
   budget: number
-  user_id: string
-  services: IServiceCreate[]
-  image?: string
+  services?: IServiceCreate[]
+  user_id?: string
+  image?: string | File | Blob | MediaSource
   _id?: string
 }
 

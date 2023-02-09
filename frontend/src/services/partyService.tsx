@@ -1,30 +1,29 @@
-import { IPartyAllData, IPartyCreateData } from '@src/interfaces/IParty'
+import { IPartyAllData, IPartyCreate, IPartyCreateData } from '@src/interfaces/IParty'
 import { IPageParams } from '@src/interfaces/IService'
 import { api, setTokenHeaders } from '@src/utils/config'
 
-const getParty = async (
-  id: string,
-  token: string,
-): Promise<IPartyCreateData> => {
+const getParty = async (id: string, token: string): Promise<IPartyCreateData> => {
   setTokenHeaders(token)
   const res: IPartyCreateData = await api.get(`/party/${id}`)
   return res
 }
 
-const getAllParties = async (
-  token: string,
-  { limit, page }: IPageParams,
-): Promise<IPartyAllData> => {
+const getAllParties = async (token: string, { limit, page }: IPageParams): Promise<IPartyAllData> => {
   setTokenHeaders(token)
-  const res: IPartyAllData = await api.get(
-    `/party?limit=${limit || 10}&page=${page || 1}`,
-  )
+  const res: IPartyAllData = await api.get(`/party?limit=${limit || 10}&page=${page || 1}`)
+  return res
+}
+
+const createParty = async (partyData: FormData, token: string): Promise<IPartyCreateData> => {
+  setTokenHeaders(token)
+  const res: IPartyCreateData = await api.post('/party/create', partyData)
   return res
 }
 
 const partyService = {
   getParty,
   getAllParties,
+  createParty,
 }
 
 export default partyService

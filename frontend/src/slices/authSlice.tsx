@@ -15,57 +15,45 @@ const initialState = {
 } as AuthInitialType
 
 // Register an user
-export const register = createAsyncThunk(
-  'auth/register',
-  async (user: RegisterType, thunkAPI) => {
-    try {
-      const res: IUserRegister = await authService.register(user)
+export const register = createAsyncThunk('auth/register', async (user: RegisterType, thunkAPI) => {
+  try {
+    const res: IUserRegister = await authService.register(user)
 
-      if (res.data.token) {
-        localStorage.setItem(
-          'myparty',
-          JSON.stringify({ token: res.data.token }),
-        )
-      }
-
-      return res
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        // Check for errors
-        return thunkAPI.rejectWithValue(e.response.data.errors[0])
-      }
+    if (res.data.token) {
+      localStorage.setItem('myparty', JSON.stringify({ token: res.data.token }))
     }
-  },
-)
+
+    return res
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+    }
+  }
+})
 
 // Login an user
-export const login = createAsyncThunk(
-  'auth/login',
-  async (user: LoginType, thunkAPI) => {
-    try {
-      const res: IUserLogin = await authService.login(user)
+export const login = createAsyncThunk('auth/login', async (user: LoginType, thunkAPI) => {
+  try {
+    const res: IUserLogin = await authService.login(user)
 
-      if (res.data.token) {
-        localStorage.setItem('myparty', JSON.stringify(res.data))
-      }
-
-      return res
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        // Check for errors
-        return thunkAPI.rejectWithValue(e.response.data.errors[0])
-      }
+    if (res.data.token) {
+      localStorage.setItem('myparty', JSON.stringify(res.data))
     }
-  },
-)
+
+    return res
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+    }
+  }
+})
 
 // logout
-export const logout = createAsyncThunk(
-  'auth/logout',
-  async (): Promise<void> => {
-    await authService.logout()
-  },
-)
+export const logout = createAsyncThunk('auth/logout', async (): Promise<void> => {
+  await authService.logout()
+})
 
 export const authSlice = createSlice({
   name: 'auth',
