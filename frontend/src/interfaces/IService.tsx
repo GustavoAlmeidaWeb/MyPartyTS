@@ -5,7 +5,7 @@ export interface IServiceCreate {
   name: string
   description: string
   price: number
-  image?: string
+  image?: string | File | Blob | MediaSource
   errors?: string[]
 }
 

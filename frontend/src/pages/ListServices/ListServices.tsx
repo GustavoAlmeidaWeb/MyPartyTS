@@ -1,31 +1,20 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
-import {
-  createService,
-  deleteService,
-  getAllServices,
-  updateService,
-} from '@src/slices/serviceSlice'
+import { createService, deleteService, getAllServices, updateService } from '@src/slices/serviceSlice'
 import { RootState } from '@src/store/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { Button, Form, Col } from 'react-bootstrap'
 import { useResetServiceStates } from '@src/hooks/useResetStates'
-import {
-  IPageParams,
-  IServiceCreate,
-  IServiceDataForm,
-} from '@src/interfaces/IService'
+import { IPageParams, IServiceCreate, IServiceDataForm } from '@src/interfaces/IService'
 import AddService from '../AddService/AddService'
 import PaginationComponent from '@src/components/PaginationComponent'
 import ListServiceItem from './ListServiceItem'
 import Message from '@src/components/Message'
-import Loading from '@src/components/Loading'
+import NewLoading from '@src/components/NewLoading'
 
 const ListServices = (): JSX.Element => {
-  const { services, loading, success, message, error } = useSelector(
-    (state: RootState) => state.service,
-  )
+  const { services, loading, success, message, error } = useSelector((state: RootState) => state.service)
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const resetStates = useResetServiceStates(dispatch)
 
@@ -119,6 +108,7 @@ const ListServices = (): JSX.Element => {
 
   return (
     <>
+      <NewLoading load={loading} />
       <AddService
         show={showModal}
         hide={handleClose}
@@ -147,19 +137,12 @@ const ListServices = (): JSX.Element => {
       {services && services.data && services.data.length > 0 ? (
         <Col as="ul" className="ps-0">
           {services.data.map((service: IServiceCreate) => (
-            <ListServiceItem
-              service={service}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              key={service._id}
-            />
+            <ListServiceItem service={service} handleDelete={handleDelete} handleEdit={handleEdit} key={service._id} />
           ))}
         </Col>
       ) : (
         <Col className="my-5">
-          <h3 className="text-center">
-            Nenhum serviço cadastrado ainda, adicione um serviço.
-          </h3>
+          <h3 className="text-center">Nenhum serviço cadastrado ainda, adicione um serviço.</h3>
         </Col>
       )}
       <Col className="d-flex justify-content-between align-items-center">
@@ -168,11 +151,7 @@ const ListServices = (): JSX.Element => {
             Total de serviços cadastrados: <strong>{services.total}</strong>
           </p>
         )}
-        <PaginationComponent
-          pages={calc}
-          activePagination={activePagination}
-          handlePage={handlePage}
-        />
+        <PaginationComponent pages={calc} activePagination={activePagination} handlePage={handlePage} />
       </Col>
     </>
   )

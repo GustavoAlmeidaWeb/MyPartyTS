@@ -21,17 +21,8 @@ type Props = {
   handleUpdate: (data: IServiceDataForm) => void
 }
 
-const AddService = ({
-  show,
-  hide,
-  handleSubmit,
-  handleUpdate,
-  edit,
-  serviceId,
-}: Props) => {
-  const { service, error, success } = useSelector(
-    (state: RootState) => state.service,
-  )
+const AddService = ({ show, hide, handleSubmit, handleUpdate, edit, serviceId }: Props) => {
+  const { service, error, success } = useSelector((state: RootState) => state.service)
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
 
   const [name, setName] = useState<string>('')
@@ -97,9 +88,7 @@ const AddService = ({
   return (
     <Modal show={show} onHide={hide} dialogClassName="modal-70w">
       <Modal.Header closeButton>
-        <Modal.Title as="h3">
-          {!edit ? 'Adicionar Serviço' : 'Atualizar Serviço'}
-        </Modal.Title>
+        <Modal.Title as="h3">{!edit ? 'Adicionar Serviço' : 'Atualizar Serviço'}</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleData}>
         <Modal.Body>
@@ -107,17 +96,9 @@ const AddService = ({
             {!edit && (
               <>
                 {imagePreview ? (
-                  <img
-                    className="rounded w-25"
-                    src={URL.createObjectURL(imagePreview)}
-                    alt={name}
-                  />
+                  <img className="rounded w-25" src={URL.createObjectURL(imagePreview)} alt={name} />
                 ) : (
-                  <img
-                    className="rounded w-25"
-                    src="https://via.placeholder.com/250"
-                    alt={name}
-                  />
+                  <img className="rounded w-25" src="https://via.placeholder.com/250" alt={name} />
                 )}
               </>
             )}
@@ -126,25 +107,13 @@ const AddService = ({
                 {!imagePreview ? (
                   <>
                     {image ? (
-                      <img
-                        className="rounded w-25"
-                        src={`${uploads}/services/${image}`}
-                        alt={name}
-                      />
+                      <img className="rounded w-25" src={`${uploads}/services/${image}`} alt={name} />
                     ) : (
-                      <img
-                        className="rounded w-25"
-                        src="https://via.placeholder.com/250"
-                        alt={name}
-                      />
+                      <img className="rounded w-25" src="https://via.placeholder.com/250" alt={name} />
                     )}
                   </>
                 ) : (
-                  <img
-                    className="rounded w-25"
-                    src={URL.createObjectURL(imagePreview)}
-                    alt={name}
-                  />
+                  <img className="rounded w-25" src={URL.createObjectURL(imagePreview)} alt={name} />
                 )}
               </>
             )}
@@ -155,28 +124,15 @@ const AddService = ({
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Nome do serviço</Form.Label>
-            <Form.Control
-              type="text"
-              value={name || ''}
-              onChange={e => setName(e.target.value)}
-            />
+            <Form.Control type="text" value={name || ''} onChange={e => setName(e.target.value)} />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Descrição</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={description || ''}
-              onChange={e => setDescription(e.target.value)}
-            />
+            <Form.Control as="textarea" rows={3} value={description || ''} onChange={e => setDescription(e.target.value)} />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Preço</Form.Label>
-            <Form.Control
-              type="number"
-              value={price || ''}
-              onChange={e => setPrice(e.target.value)}
-            />
+            <Form.Control type="number" value={price || ''} onChange={e => setPrice(e.target.value)} />
           </Form.Group>
           {error && <Message type="danger" msg={error} />}
         </Modal.Body>

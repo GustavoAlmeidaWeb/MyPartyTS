@@ -10,7 +10,7 @@ export interface ICreateParty {
   date: string
   hour: string
   image?: string
-  services?: ICreateService[]
+  services?: ICreateService[] | any
 }
 
 export interface IUpdateParty extends ICreateParty {

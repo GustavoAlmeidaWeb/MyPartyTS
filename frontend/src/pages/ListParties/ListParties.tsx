@@ -6,16 +6,16 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { createParty, getAllParties, getParty } from '@src/slices/partySlice'
 import { IPageParams, IServiceCreate } from '@src/interfaces/IService'
 import { IPartyCreate } from '@src/interfaces/IParty'
-import Loading from '@src/components/Loading'
 import PaginationComponent from '@src/components/PaginationComponent'
 import { Button, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import AddParty from '../AddParty/AddParty'
 import { useResetPartyStates } from '@src/hooks/useResetStates'
 import Message from '@src/components/Message'
+import NewLoading from '@src/components/NewLoading'
 
 const ListParties = (): JSX.Element => {
-  const { parties, success, message } = useSelector((state: RootState) => state.party)
+  const { parties, success, message, loading } = useSelector((state: RootState) => state.party)
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const resetStates = useResetPartyStates(dispatch)
 
@@ -61,24 +61,17 @@ const ListParties = (): JSX.Element => {
     setEditParty(false)
   }
 
-  const handleSubmit = async (data: IPartyCreate | any, service: IServiceCreate[]): Promise<void> => {
+  const handleSubmit = async (data: IPartyCreate | any, service: any): Promise<void> => {
     const formData: FormData = new FormData()
     Object.keys(data).forEach((key: any) => formData.append(key, data[key]))
     formData.append('services', JSON.stringify(service))
     await dispatch(createParty(formData))
     resetStates()
-    // console.log(formData)
   }
-
-  // if (loading) {
-  //   return <Loading />
-  // }
-
-  // console.log(parties)
-  // console.log(party)
 
   return (
     <>
+      <NewLoading load={loading} />
       <AddParty editParty={editParty} show={showModal} hide={handleClose} handleSubmit={handleSubmit} />
       <div>
         <h2 className="display-6">Minhas Festas</h2>

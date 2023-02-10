@@ -16,7 +16,7 @@ type Props = {
   show: boolean
   editParty: boolean
   hide: () => void
-  handleSubmit: (data: IPartyCreate, service: IServiceCreate[]) => void
+  handleSubmit: (data: IPartyCreate, service: any) => void
 }
 
 const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
@@ -74,9 +74,9 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
     const filterService = servicesArr.filter((s: any) => s._id === value)
 
     if (checked) {
-      setPartyServices((service: any) => [...service, filterService[0]])
+      setPartyServices((service: IServiceCreate[]) => [...service, filterService[0]])
     } else {
-      setPartyServices((service: any) => service.filter((s: any) => s._id !== value))
+      setPartyServices((service: IServiceCreate[]) => service.filter((s: any) => s._id !== value))
     }
   }
 

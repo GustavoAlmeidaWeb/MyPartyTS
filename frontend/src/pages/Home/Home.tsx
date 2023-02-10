@@ -18,7 +18,7 @@ import {
   faArrowRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons'
 
-import Loading from '@src/components/Loading'
+import NewLoading from '@src/components/NewLoading'
 
 const Home = (): JSX.Element => {
   const { user, loading } = useSelector((state: RootState) => state.user)
@@ -34,46 +34,23 @@ const Home = (): JSX.Element => {
     resetStates()
   }
 
-  if (loading) {
-    return <Loading />
-  }
-
   return (
     <>
-      <Col
-        as="section"
-        md={{ span: 10, offset: 1 }}
-        lg={{ span: 10, offset: 1 }}
-        xl={{ span: 8, offset: 2 }}
-      >
+      <NewLoading load={loading} />
+      <Col as="section" md={{ span: 10, offset: 1 }} lg={{ span: 10, offset: 1 }} xl={{ span: 8, offset: 2 }}>
         {user.data && (
           <div className="d-flex align-items-center">
             <div className="w-25">
               {user.data.image ? (
-                <>
-                  <img
-                    className="w-100 rounded-circle"
-                    src={`${uploads}/users/${user.data.image}`}
-                    alt={user.data.name}
-                  />
-                </>
+                <img className="w-100 rounded-circle" src={`${uploads}/users/${user.data.image}`} alt={user.data.name} />
               ) : (
-                <>
-                  <img
-                    className="w-100 rounded-circle"
-                    src="https://via.placeholder.com/250"
-                    alt={user.data.name}
-                  />
-                </>
+                <img className="w-100 rounded-circle" src="https://via.placeholder.com/250" alt={user.data.name} />
               )}
             </div>
             <div className="w-75 ps-3">
               <h2 className="display-6">
                 Olá, <strong>{user.data.name}</strong>
-                <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip>Editar Perfil</Tooltip>}
-                >
+                <OverlayTrigger placement="top" overlay={<Tooltip>Editar Perfil</Tooltip>}>
                   <Link to="/minha-conta" className="btn btn-light">
                     <FontAwesomeIcon icon={faPencil} />
                   </Link>
@@ -81,11 +58,7 @@ const Home = (): JSX.Element => {
               </h2>
               <p>
                 Não é você ?{' '}
-                <Link
-                  className="text-decoration-none"
-                  to="/login"
-                  onClick={handleLogout}
-                >
+                <Link className="text-decoration-none" to="/login" onClick={handleLogout}>
                   Sair <FontAwesomeIcon icon={faArrowRightFromBracket} />
                 </Link>
               </p>
@@ -94,11 +67,7 @@ const Home = (): JSX.Element => {
         )}
       </Col>
       <Row as="section" className="py-4">
-        <Col
-          className="border p-3 rounded mb-4"
-          sm={{ span: 12 }}
-          md={{ span: 12 }}
-        >
+        <Col className="border p-3 rounded mb-4" sm={{ span: 12 }} md={{ span: 12 }}>
           <h3>
             <FontAwesomeIcon icon={faChampagneGlasses} /> Suas Festas
           </h3>
@@ -107,11 +76,7 @@ const Home = (): JSX.Element => {
             <FontAwesomeIcon icon={faMagnifyingGlass} /> Ver suas festas
           </Link>
         </Col>
-        <Col
-          className="border p-3 rounded mb-4"
-          sm={{ span: 12 }}
-          md={{ span: 12 }}
-        >
+        <Col className="border p-3 rounded mb-4" sm={{ span: 12 }} md={{ span: 12 }}>
           <h3>
             <FontAwesomeIcon icon={faToolbox} /> Lista de serviços
           </h3>

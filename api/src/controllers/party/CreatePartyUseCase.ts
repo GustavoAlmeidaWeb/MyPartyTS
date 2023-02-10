@@ -1,6 +1,7 @@
-import { checkPartyBudget } from '@helpers/check-party-budget'
-import { ICreateParty } from '@interfaces/party/IParty'
 import { PartyModel } from '@models/Party/Party'
+import { ICreateParty } from '@interfaces/party/IParty'
+import { isJson } from '@helpers/check-if-is-json'
+import { checkPartyBudget } from '@helpers/check-party-budget'
 
 type ResponseType = {
   status: number
@@ -22,7 +23,9 @@ export const createPartyUseCase = async ({
   services,
   user_id,
 }: ICreateParty): Promise<ResponseType> => {
-  if (services && !checkPartyBudget(budget, services)) {
+  const servicesParse = isJson(services) ? JSON.parse(services) : services
+
+  if (servicesParse && !checkPartyBudget(budget, servicesParse)) {
     return {
       status: 406,
       json: { errors: ['O seu orçamento é insuficiente.'] },
@@ -42,7 +45,7 @@ export const createPartyUseCase = async ({
       date,
       hour,
       image,
-      services,
+      services: servicesParse,
       user_id,
     })
 

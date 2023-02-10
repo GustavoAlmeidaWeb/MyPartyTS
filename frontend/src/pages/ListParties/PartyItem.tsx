@@ -8,27 +8,29 @@ import { getParty } from '@src/slices/partySlice'
 import { uploads } from '@src/utils/config'
 import { Col } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Loading from '@src/components/Loading'
+import NewLoading from '@src/components/NewLoading'
 
 type Props = {}
 
 const PartyItem = (props: Props): JSX.Element => {
-  const { party, loading } = useSelector((state: RootState) => state.party)
   const { id } = useParams()
+  const { party, loading } = useSelector((state: RootState) => state.party)
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
+  const [totalServices, setTotalServices] = useState<number>()
 
   useEffect(() => {
     dispatch(getParty(id))
   }, [id])
 
-  console.log(party)
-
-  if (loading) {
-    return <Loading />
-  }
+  useEffect(() => {
+    if (party.services) {
+      setTotalServices(party.services.reduce((sum: number, service: any) => (sum += Number(service.price)), 0))
+    }
+  }, [party.services])
 
   return (
     <>
+      <NewLoading load={loading} />
       {party && party._id && (
         <Col>
           {party.image ? (
@@ -72,9 +74,9 @@ const PartyItem = (props: Props): JSX.Element => {
                 <th>Preço</th>
               </tr>
             </thead>
-            <tbody>
-              {party.services && party.services.length > 0 && (
-                <>
+            {party.services && party.services.length > 0 && (
+              <>
+                <tbody>
                   {party.services.map((service: any) => (
                     <tr key={service._id}>
                       <td className="w-25">
@@ -88,9 +90,15 @@ const PartyItem = (props: Props): JSX.Element => {
                       <td>{service.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                     </tr>
                   ))}
-                </>
-              )}
-            </tbody>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan={2}>Valor total</td>
+                    <td>{totalServices && totalServices.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                  </tr>
+                </tfoot>
+              </>
+            )}
           </table>
         </Col>
       )}

@@ -13,11 +13,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan, faPenToSquare } from '@fortawesome/free-regular-svg-icons'
 
 import Message from '@src/components/Message'
+import NewLoading from '@src/components/NewLoading'
 
 const MyAccount = (): JSX.Element => {
-  const { user, loading, message, error } = useSelector(
-    (state: RootState) => state.user,
-  )
+  const { user, loading, message, error } = useSelector((state: RootState) => state.user)
 
   const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const resetStates = useResetUserStates(dispatch)
@@ -61,14 +60,10 @@ const MyAccount = (): JSX.Element => {
       setCurrentPass('')
       setNewPass('')
       setConfirmPass('')
-      document
-        .querySelectorAll('.ipt-password')
-        .forEach((ipt, value) => ipt.setAttribute('disabled', ''))
+      document.querySelectorAll('.ipt-password').forEach((ipt, value) => ipt.setAttribute('disabled', ''))
     } else {
       setChangePass(true)
-      document
-        .querySelectorAll('.ipt-password')
-        .forEach(ipt => ipt.removeAttribute('disabled'))
+      document.querySelectorAll('.ipt-password').forEach(ipt => ipt.removeAttribute('disabled'))
     }
   }
 
@@ -92,9 +87,7 @@ const MyAccount = (): JSX.Element => {
     }
 
     const formData: FormData = new FormData()
-    Object.keys(userData).forEach((key: string) =>
-      formData.append(key, userData[key]),
-    )
+    Object.keys(userData).forEach((key: string) => formData.append(key, userData[key]))
 
     await dispatch(updateUser(formData))
     resetStates()
@@ -108,157 +101,99 @@ const MyAccount = (): JSX.Element => {
   }
 
   return (
-    <Col
-      md={{ span: 10, offset: 1 }}
-      lg={{ span: 10, offset: 1 }}
-      xl={{ span: 8, offset: 2 }}
-    >
-      <h2 className="display-4 mb-3 text-center">Minha Conta</h2>
-      <p className="text-center">Se desejar atualize seu perfil.</p>
-      <Col className="text-center mb-3">
-        {previewImage || img ? (
-          <>
-            <img
-              className="rounded w-25"
-              src={
-                previewImage
-                  ? URL.createObjectURL(previewImage)
-                  : `${uploads}/users/${img}`
-              }
-              alt={name}
-            />
-          </>
-        ) : (
-          <>
-            <img
-              className="rounded w-25"
-              src="https://via.placeholder.com/250"
-              alt={name}
-            />
-          </>
-        )}
-      </Col>
-      <Form className="mb-3" onSubmit={handleUpdate}>
-        <Form.Group className="mb-3">
-          <Form.Label>Trocar imagem de perfil</Form.Label>
-          <Form.Control type="file" onChange={handleFile} />
-        </Form.Group>
-        <FloatingLabel
-          controlId="floatingInput"
-          label="Nome"
-          className="mb-3 text-dark"
-        >
-          <Form.Control
-            type="text"
-            placeholder="Nome"
-            onChange={e => setName(e.target.value)}
-            value={name || ''}
-          />
-        </FloatingLabel>
-        <FloatingLabel
-          controlId="floatingInput"
-          label="E-mail"
-          className="mb-3 text-dark"
-        >
-          <Form.Control
-            type="email"
-            placeholder="E-mail"
-            value={email || ''}
-            disabled
-          />
-        </FloatingLabel>
-        <FloatingLabel
-          controlId="floatingInput"
-          label="Telefone"
-          className="mb-3 text-dark"
-        >
-          <Form.Control
-            type="text"
-            placeholder="Telefone"
-            onChange={e => setPhone(e.target.value)}
-            value={phone || ''}
-          />
-        </FloatingLabel>
-        <Form.Group className="d-flex align-items-center my-4">
-          <h3 className="h4">Deseja alterar sua senha ?</h3>
-          <Form.Check
-            className="ms-2"
-            type="switch"
-            id="custom-switch"
-            onChange={handleSwitch}
-          />
-        </Form.Group>
-        <FloatingLabel
-          controlId="floatingInput"
-          label="Senha atual"
-          className="mb-3 text-dark"
-        >
-          <Form.Control
-            className="ipt-password"
-            type="password"
-            placeholder="Senha atual"
-            onChange={e => setCurrentPass(e.target.value)}
-            value={currentPass || ''}
-            disabled
-          />
-        </FloatingLabel>
-        <FloatingLabel
-          controlId="floatingInput"
-          label="Nova senha"
-          className="mb-3 text-dark"
-        >
-          <Form.Control
-            className="ipt-password"
-            type="password"
-            placeholder="Nova senha"
-            onChange={e => setNewPass(e.target.value)}
-            value={newPass || ''}
-            disabled
-          />
-        </FloatingLabel>
-        <FloatingLabel
-          controlId="floatingInput"
-          label="Confirmar nova senha"
-          className="mb-3 text-dark"
-        >
-          <Form.Control
-            className="ipt-password"
-            type="password"
-            placeholder="Confirmar nova senha"
-            onChange={e => setConfirmPass(e.target.value)}
-            value={confirmPass || ''}
-            disabled
-          />
-        </FloatingLabel>
-        {!loading && (
-          <Form.Group className="d-flex justify-content-between">
-            <Button type="button" variant="danger" onClick={handleDelete}>
-              <FontAwesomeIcon icon={faTrashCan} /> Excluir conta
-            </Button>
-            <Button variant="primary" type="submit">
-              <FontAwesomeIcon icon={faPenToSquare} /> Atualizar Conta
-            </Button>
+    <>
+      <NewLoading load={loading} />
+      <Col md={{ span: 10, offset: 1 }} lg={{ span: 10, offset: 1 }} xl={{ span: 8, offset: 2 }}>
+        <h2 className="display-4 mb-3 text-center">Minha Conta</h2>
+        <p className="text-center">Se desejar atualize seu perfil.</p>
+        <Col className="text-center mb-3">
+          {previewImage || img ? (
+            <>
+              <img
+                className="rounded w-25"
+                src={previewImage ? URL.createObjectURL(previewImage) : `${uploads}/users/${img}`}
+                alt={name}
+              />
+            </>
+          ) : (
+            <>
+              <img className="rounded w-25" src="https://via.placeholder.com/250" alt={name} />
+            </>
+          )}
+        </Col>
+        <Form className="mb-3" onSubmit={handleUpdate}>
+          <Form.Group className="mb-3">
+            <Form.Label>Trocar imagem de perfil</Form.Label>
+            <Form.Control type="file" onChange={handleFile} />
           </Form.Group>
-        )}
-        {loading && (
-          <Form.Group className="d-flex justify-content-between">
-            <Button
-              type="button"
-              variant="danger"
-              onClick={handleDelete}
+          <FloatingLabel controlId="floatingInput" label="Nome" className="mb-3 text-dark">
+            <Form.Control type="text" placeholder="Nome" onChange={e => setName(e.target.value)} value={name || ''} />
+          </FloatingLabel>
+          <FloatingLabel controlId="floatingInput" label="E-mail" className="mb-3 text-dark">
+            <Form.Control type="email" placeholder="E-mail" value={email || ''} disabled />
+          </FloatingLabel>
+          <FloatingLabel controlId="floatingInput" label="Telefone" className="mb-3 text-dark">
+            <Form.Control type="text" placeholder="Telefone" onChange={e => setPhone(e.target.value)} value={phone || ''} />
+          </FloatingLabel>
+          <Form.Group className="d-flex align-items-center my-4">
+            <h3 className="h4">Deseja alterar sua senha ?</h3>
+            <Form.Check className="ms-2" type="switch" id="custom-switch" onChange={handleSwitch} />
+          </Form.Group>
+          <FloatingLabel controlId="floatingInput" label="Senha atual" className="mb-3 text-dark">
+            <Form.Control
+              className="ipt-password"
+              type="password"
+              placeholder="Senha atual"
+              onChange={e => setCurrentPass(e.target.value)}
+              value={currentPass || ''}
               disabled
-            >
-              Aguarde
-            </Button>
-            <Button variant="primary" type="submit" disabled>
-              Aguarde
-            </Button>
-          </Form.Group>
-        )}
-      </Form>
-      {message && <Message type="success" msg={message} />}
-      {error && <Message type="danger" msg={error} />}
-    </Col>
+            />
+          </FloatingLabel>
+          <FloatingLabel controlId="floatingInput" label="Nova senha" className="mb-3 text-dark">
+            <Form.Control
+              className="ipt-password"
+              type="password"
+              placeholder="Nova senha"
+              onChange={e => setNewPass(e.target.value)}
+              value={newPass || ''}
+              disabled
+            />
+          </FloatingLabel>
+          <FloatingLabel controlId="floatingInput" label="Confirmar nova senha" className="mb-3 text-dark">
+            <Form.Control
+              className="ipt-password"
+              type="password"
+              placeholder="Confirmar nova senha"
+              onChange={e => setConfirmPass(e.target.value)}
+              value={confirmPass || ''}
+              disabled
+            />
+          </FloatingLabel>
+          {!loading && (
+            <Form.Group className="d-flex justify-content-between">
+              <Button type="button" variant="danger" onClick={handleDelete}>
+                <FontAwesomeIcon icon={faTrashCan} /> Excluir conta
+              </Button>
+              <Button variant="primary" type="submit">
+                <FontAwesomeIcon icon={faPenToSquare} /> Atualizar Conta
+              </Button>
+            </Form.Group>
+          )}
+          {loading && (
+            <Form.Group className="d-flex justify-content-between">
+              <Button type="button" variant="danger" onClick={handleDelete} disabled>
+                Aguarde
+              </Button>
+              <Button variant="primary" type="submit" disabled>
+                Aguarde
+              </Button>
+            </Form.Group>
+          )}
+        </Form>
+        {message && <Message type="success" msg={message} />}
+        {error && <Message type="danger" msg={error} />}
+      </Col>
+    </>
   )
 }
 

@@ -25,34 +25,14 @@ function App() {
       <Container as="main" className="app" fluid>
         <Container as="section">
           <Routes>
-            <Route
-              path="/"
-              element={auth ? <Home /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/minha-conta"
-              element={auth ? <MyAccount /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/servicos"
-              element={auth ? <ListServices /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/festas"
-              element={auth ? <ListParties /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/festa/:id"
-              element={auth ? <PartyItem /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/login"
-              element={!auth ? <Login /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/cadastro"
-              element={!auth ? <Register /> : <Navigate to="/" />}
-            />
+            <Route path="/" element={auth ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/home" element={auth ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/minha-conta" element={auth ? <MyAccount /> : <Navigate to="/login" />} />
+            <Route path="/servicos" element={auth ? <ListServices /> : <Navigate to="/login" />} />
+            <Route path="/festas" element={auth ? <ListParties /> : <Navigate to="/login" />} />
+            <Route path="/festa/:id" element={auth ? <PartyItem /> : <Navigate to="/login" />} />
+            <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
+            <Route path="/cadastro" element={!auth ? <Register /> : <Navigate to="/" />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Container>
