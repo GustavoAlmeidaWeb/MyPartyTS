@@ -56,6 +56,20 @@ export const createParty = createAsyncThunk('party/create', async (partyData: Fo
   }
 })
 
+// Get a party
+export const deleteParty = createAsyncThunk('party/delete', async (id: string, thunkAPI) => {
+  try {
+    const { auth }: RootState = thunkAPI.getState()
+    const res = await partyService.deleteParty(id, auth.user.data.token)
+    return res.data
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.errors[0])
+    }
+  }
+})
+
 export const partySlice = createSlice({
   name: 'party',
   initialState,
@@ -115,6 +129,21 @@ export const partySlice = createSlice({
         state.loading = false
         state.error = action.payload
         state.party = {}
+      })
+      .addCase(deleteParty.pending, state => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(deleteParty.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = null
+        state.success = true
+        state.party = action.payload
+        state.message = 'Festa excluída com sucesso.'
+      })
+      .addCase(deleteParty.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
       })
   },
 })

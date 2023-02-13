@@ -35,3 +35,12 @@ export interface PartyInitialInterface {
   loading: boolean
   message: string
 }
+
+export interface IPartyDelete {
+  message?: string
+  errors?: string[]
+}
+
+export interface IPartyDeleteData {
+  data: IPartyDelete
+}

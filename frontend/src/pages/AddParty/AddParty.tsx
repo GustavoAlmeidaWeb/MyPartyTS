@@ -2,15 +2,16 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { uploads } from '@src/utils/config'
 import { RootState } from '@src/store/store'
-import { Modal, Button, Form, Col } from 'react-bootstrap'
+import { Modal, Button, Form, Col, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from '@reduxjs/toolkit'
 import { getAllServices } from '@src/slices/serviceSlice'
-import Message from '@src/components/Message'
 import { IPartyCreate } from '@src/interfaces/IParty'
 import { IServiceCreate } from '@src/interfaces/IService'
+import { formatMoney } from '@src/utils/helpers'
+import Message from '@src/components/Message'
 
 type Props = {
   show: boolean
@@ -81,7 +82,7 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
   }
 
   return (
-    <Modal show={show} onHide={hide} dialogClassName="modal-70w">
+    <Modal show={show} onHide={hide} size="xl">
       <Modal.Header closeButton>
         <Modal.Title as="h3">Nova Festa</Modal.Title>
       </Modal.Header>
@@ -134,17 +135,42 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
             <Form.Control type="number" value={budget || ''} onChange={e => setBudget(Number(e.target.value))} />
           </Form.Group>
           {services && services.data && services.data.length > 0 && (
-            <Form.Group className="mb-3">
-              {services.data.map((service: any) => (
-                <Form.Check
-                  type="checkbox"
-                  onChange={e => handleServices(e)}
-                  value={service._id}
-                  label={service.name}
-                  key={service._id}
-                />
-              ))}
-            </Form.Group>
+            <Table striped hover size="sm">
+              <thead>
+                <tr>
+                  <th className="text-center">#</th>
+                  <th className="w-100-px text-center">Imagem</th>
+                  <th className="ps-3">Nome</th>
+                  <th>Preço</th>
+                </tr>
+              </thead>
+              <tbody>
+                {services.data.map((service: any) => (
+                  <tr>
+                    <td className="text-center">
+                      <Form.Check type="checkbox" onChange={e => handleServices(e)} value={service._id} key={service._id} />
+                    </td>
+                    <td className="text-center">
+                      {service.image ? (
+                        <img
+                          className="rounded-circle service-img-thumb"
+                          src={`${uploads}/services/${service.image}`}
+                          alt={service.name}
+                        />
+                      ) : (
+                        <img
+                          className="rounded-circle service-img-thumb"
+                          src="https://via.placeholder.com/150"
+                          alt={service.name}
+                        />
+                      )}
+                    </td>
+                    <td className="ps-3">{service.name}</td>
+                    <td>{formatMoney(service.price)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           )}
           <Form.Group className="mb-3">
             <Form.Label>Data do Evento</Form.Label>

@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { RootState } from '@src/store/store'
 import { AnyAction } from '@reduxjs/toolkit'
-import { getParty } from '@src/slices/partySlice'
+import { deleteParty, getParty } from '@src/slices/partySlice'
 import { uploads } from '@src/utils/config'
-import { Col } from 'react-bootstrap'
+import { Col, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
+import { useResetPartyStates } from '@src/hooks/useResetStates'
+import { formatDate, formatMoney } from '@src/utils/helpers'
 import NewLoading from '@src/components/NewLoading'
 
-type Props = {}
-
-const PartyItem = (props: Props): JSX.Element => {
+const PartyItem = (): JSX.Element => {
   const { id } = useParams()
   const { party, loading } = useSelector((state: RootState) => state.party)
-  const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
   const [totalServices, setTotalServices] = useState<number>()
+  const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
+  const navigate = useNavigate()
+  const resetStates = useResetPartyStates(dispatch)
 
   useEffect(() => {
     dispatch(getParty(id))
@@ -27,6 +30,12 @@ const PartyItem = (props: Props): JSX.Element => {
       setTotalServices(party.services.reduce((sum: number, service: any) => (sum += Number(service.price)), 0))
     }
   }, [party.services])
+
+  const handleDelete = async (id: string): Promise<void> => {
+    await dispatch(deleteParty(id))
+    resetStates()
+    navigate('/festas')
+  }
 
   return (
     <>
@@ -51,14 +60,14 @@ const PartyItem = (props: Props): JSX.Element => {
                 <td scope="col">
                   <strong>Orçamento</strong>
                 </td>
-                <td>{party.budget.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                <td>{formatMoney(party.budget)}</td>
               </tr>
               <tr>
                 <td scope="col">
                   <strong>Data e hora do Evento</strong>
                 </td>
                 <td>
-                  {new Date(party.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' })} às {party.hour}h
+                  {formatDate(party.date)} às {party.hour}h
                 </td>
               </tr>
             </tbody>
@@ -87,19 +96,22 @@ const PartyItem = (props: Props): JSX.Element => {
                         )}
                       </td>
                       <td>{service.name}</td>
-                      <td>{service.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                      <td>{formatMoney(service.price)}</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr>
                     <td colSpan={2}>Valor total</td>
-                    <td>{totalServices && totalServices.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                    <td>{totalServices && formatMoney(totalServices)}</td>
                   </tr>
                 </tfoot>
               </>
             )}
           </table>
+          <Button variant="danger" onClick={() => handleDelete(party._id)}>
+            <FontAwesomeIcon icon={faTrashAlt} /> Excluir
+          </Button>
         </Col>
       )}
     </>

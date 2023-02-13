@@ -1,4 +1,4 @@
-import { IPartyAllData, IPartyCreate, IPartyCreateData } from '@src/interfaces/IParty'
+import { IPartyAllData, IPartyCreateData, IPartyDeleteData } from '@src/interfaces/IParty'
 import { IPageParams } from '@src/interfaces/IService'
 import { api, setTokenHeaders } from '@src/utils/config'
 
@@ -20,10 +20,17 @@ const createParty = async (partyData: FormData, token: string): Promise<IPartyCr
   return res
 }
 
+const deleteParty = async (id: string, token: string): Promise<IPartyDeleteData> => {
+  setTokenHeaders(token)
+  const res: IPartyDeleteData = await api.delete(`/party/${id}`)
+  return res
+}
+
 const partyService = {
   getParty,
   getAllParties,
   createParty,
+  deleteParty,
 }
 
 export default partyService
