@@ -2,15 +2,15 @@
   min-height: 73.5vh;
   padding: 40px 0;
 }
-
 .max-height-120 {
   max-height: 120px;
 }
-
+.max-height-400 {
+  max-height: 400px;
+}
 .no-scroll {
   overflow: hidden !important;
 }
-
 .container-loading {
   position: fixed;
   background-color: rgba(255,255,255,0.5);
@@ -20,13 +20,16 @@
   right: 0;
   z-index: 9999;
 }
-
 .service-img-thumb {
   height: 35px;
   object-fit: cover;
   width: 35px;
 }
-
+.service-img-thumb-70 {
+  height: 70px;
+  object-fit: cover;
+  width: 70px;
+}
 .w-100-px {
   width: 100px;
 }

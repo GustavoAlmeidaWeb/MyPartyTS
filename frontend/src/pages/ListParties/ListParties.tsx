@@ -6,13 +6,13 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { createParty, getAllParties, getParty } from '@src/slices/partySlice'
 import { IPageParams, IServiceCreate } from '@src/interfaces/IService'
 import { IPartyCreate } from '@src/interfaces/IParty'
-import PaginationComponent from '@src/components/PaginationComponent'
-import { Button, Col } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import AddParty from '../AddParty/AddParty'
 import { useResetPartyStates } from '@src/hooks/useResetStates'
+import { Button, Col } from 'react-bootstrap'
+import PaginationComponent from '@src/components/PaginationComponent'
+import AddParty from '../AddParty/AddParty'
 import Message from '@src/components/Message'
 import NewLoading from '@src/components/NewLoading'
+import ListPartyItem from './ListPartyItem'
 
 const ListParties = (): JSX.Element => {
   const { parties, success, message, loading } = useSelector((state: RootState) => state.party)
@@ -61,6 +61,9 @@ const ListParties = (): JSX.Element => {
     setEditParty(false)
   }
 
+  const handleDelete = (id: string) => {}
+  const handleEdit = (id: string) => {}
+
   const handleSubmit = async (data: IPartyCreate | any, service: any): Promise<void> => {
     const formData: FormData = new FormData()
     Object.keys(data).forEach((key: any) => formData.append(key, data[key]))
@@ -81,17 +84,13 @@ const ListParties = (): JSX.Element => {
       </div>
       {message && <Message msg={message} type="success" />}
       {parties && parties.data && parties.data.length > 0 ? (
-        <>
+        <Col as="ul" className="ps-0">
           {parties.data.map((party: IPartyCreate) => (
-            <p key={party._id}>
-              <Link to={`/festa/${party._id}`}>{party.title}</Link>
-            </p>
+            <ListPartyItem key={party._id} handleDelete={handleDelete} handleEdit={handleEdit} party={party} />
           ))}
-        </>
+        </Col>
       ) : (
-        <>
-          <h3>Nenhuma festa cadastrada.</h3>
-        </>
+        <h3>Nenhuma festa cadastrada.</h3>
       )}
       <Col className="d-flex justify-content-between align-items-center">
         {parties && (

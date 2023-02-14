@@ -42,11 +42,17 @@ const PartyItem = (): JSX.Element => {
       <NewLoading load={loading} />
       {party && party._id && (
         <Col>
-          {party.image ? (
-            <img className="w-100" src={`${uploads}/parties/${party.image}`} alt={party.title} />
-          ) : (
-            <img className="w-100" src="https://via.placeholder.com/1280x600" alt="Festa sem imagem cadastrada" />
-          )}
+          <div className="text-center">
+            {party.image ? (
+              <img className="max-height-400 mw-100" src={`${uploads}/parties/${party.image}`} alt={party.title} />
+            ) : (
+              <img
+                className="max-height-400 mw-100"
+                src="https://via.placeholder.com/1280x600"
+                alt="Festa sem imagem cadastrada"
+              />
+            )}
+          </div>
           <h2 className="display-6 my-3">{party.title}</h2>
           <table className="table">
             <tbody>
@@ -90,9 +96,17 @@ const PartyItem = (): JSX.Element => {
                     <tr key={service._id}>
                       <td className="w-25">
                         {service.image ? (
-                          <img className="w-100" src={`${uploads}/services/${service.image}`} alt={service.name} />
+                          <img
+                            className="rounded-circle service-img-thumb-70"
+                            src={`${uploads}/services/${service.image}`}
+                            alt={service.name}
+                          />
                         ) : (
-                          <img className="w-100" src="https://via.placeholder.com/150" alt="Serviço sem imagem" />
+                          <img
+                            className="rounded-circle service-img-thumb-70"
+                            src="https://via.placeholder.com/150"
+                            alt="Serviço sem imagem"
+                          />
                         )}
                       </td>
                       <td>{service.name}</td>

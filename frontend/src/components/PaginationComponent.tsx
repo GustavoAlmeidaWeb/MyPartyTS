@@ -6,20 +6,12 @@ type Props = {
   handlePage: (page: number) => void
 }
 
-const PaginationComponent = ({
-  pages,
-  activePagination,
-  handlePage,
-}: Props) => {
+const PaginationComponent = ({ pages, activePagination, handlePage }: Props) => {
   return (
     <Pagination>
       {pages &&
         pages.map((page, index) => (
-          <Pagination.Item
-            key={index}
-            active={page === activePagination}
-            onClick={() => handlePage(page)}
-          >
+          <Pagination.Item key={index} active={page === activePagination} onClick={() => handlePage(page)}>
             {page}
           </Pagination.Item>
         ))}

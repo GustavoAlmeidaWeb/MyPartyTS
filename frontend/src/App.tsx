@@ -33,7 +33,7 @@ function App() {
             <Route path="/festa/:id" element={auth ? <PartyItem /> : <Navigate to="/login" />} />
             <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
             <Route path="/cadastro" element={!auth ? <Register /> : <Navigate to="/" />} />
-            <Route path="*" element={<Home />} />
+            <Route path="*" element={auth ? <Home /> : <Navigate to="/login" />} />
           </Routes>
         </Container>
       </Container>
