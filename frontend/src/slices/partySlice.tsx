@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { RootState } from '@src/store/store'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { IPartyCreate, PartyInitialInterface } from '@src/interfaces/IParty'
+import { PartyInitialInterface } from '@src/interfaces/IParty'
 import { IPageParams } from '@src/interfaces/IService'
 import partyService from '@src/services/partyService'
+import { invalidToken } from '@src/utils/helpers'
 
 const initialState = {
   party: {},
@@ -22,6 +23,9 @@ export const getParty = createAsyncThunk('party/get', async (id: string, thunkAP
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -33,9 +37,13 @@ export const getAllParties = createAsyncThunk('party/getAll', async (params: IPa
   try {
     const { auth }: RootState = thunkAPI.getState()
     const res = await partyService.getAllParties(auth.user.data.token, params)
+    console.log(res.data)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -50,6 +58,9 @@ export const createParty = createAsyncThunk('party/create', async (partyData: Fo
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -64,6 +75,9 @@ export const deleteParty = createAsyncThunk('party/delete', async (id: string, t
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }

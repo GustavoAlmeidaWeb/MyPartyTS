@@ -3,6 +3,7 @@ import { RootState } from '@src/store/store'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { IPageParams, IServiceDataForm, IServiceDeleteData, ServiceInitialInterface } from '@src/interfaces/IService'
 import serviceService from '@src/services/serviceService'
+import { invalidToken } from '@src/utils/helpers'
 
 const initialState = {
   service: {},
@@ -21,6 +22,9 @@ export const getService = createAsyncThunk('service/get', async (id: string, thu
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -35,6 +39,9 @@ export const getAllServices = createAsyncThunk('service/getAll', async (params: 
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -49,6 +56,9 @@ export const createService = createAsyncThunk('service/create', async (serviceDa
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -63,6 +73,9 @@ export const updateService = createAsyncThunk('service/update', async (serviceDa
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -77,6 +90,9 @@ export const deleteService = createAsyncThunk('service/delete', async (id: strin
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }

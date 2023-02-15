@@ -13,6 +13,7 @@ import { useResetAuthStates } from '@src/hooks/useResetStates'
 import { showPassword } from '@src/hooks/useShowPass'
 import Message from '@src/components/Message'
 import NewLoading from '@src/components/NewLoading'
+import { useAuth } from '@src/hooks/useAuth'
 
 const Login = (): JSX.Element => {
   const { loading, error, message } = useSelector((state: RootState) => state.auth)

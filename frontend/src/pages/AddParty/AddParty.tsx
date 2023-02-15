@@ -146,9 +146,9 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
               </thead>
               <tbody>
                 {services.data.map((service: any) => (
-                  <tr>
+                  <tr key={service._id}>
                     <td className="text-center">
-                      <Form.Check type="checkbox" onChange={e => handleServices(e)} value={service._id} key={service._id} />
+                      <Form.Check type="checkbox" onChange={e => handleServices(e)} value={service._id} />
                     </td>
                     <td className="text-center">
                       {service.image ? (

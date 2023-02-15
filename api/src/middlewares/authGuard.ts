@@ -10,7 +10,7 @@ export const authGuard = async (
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
 
-  if (!token) return res.status(401).json({ errors: ['Acesso negado.'] })
+  if (!token) return res.status(401).json({ errors: ['ACCESS_DENIED'] })
 
   try {
     const verified = <string | JwtPayload>(
@@ -19,6 +19,6 @@ export const authGuard = async (
     req.user = await UserModel.findOne({ _id: verified['id'] })
     next()
   } catch (error) {
-    res.status(401).json({ errors: ['Token inválido.'] })
+    res.status(401).json({ errors: ['INVALID_TOKEN'] })
   }
 }

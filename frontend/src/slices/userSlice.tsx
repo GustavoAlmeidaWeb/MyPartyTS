@@ -1,8 +1,9 @@
 import axios from 'axios'
+import userService from '@src/services/userService'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthInitialType } from '@src/@types/UserTypes'
 import { RootState } from '@src/store/store'
-import userService from '@src/services/userService'
+import { invalidToken } from '@src/utils/helpers'
 
 const initialState = {
   user: {},
@@ -20,6 +21,9 @@ export const getUser = createAsyncThunk('user/get', async (_, thunkAPI) => {
     return res
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -34,6 +38,9 @@ export const updateUser = createAsyncThunk('user/update', async (userData: FormD
     return res
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -48,6 +55,9 @@ export const deleteUser = createAsyncThunk('user/delete', async (_, thunkAPI) =>
     return res
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      // Check if is invalid token
+      invalidToken(e)
+
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
