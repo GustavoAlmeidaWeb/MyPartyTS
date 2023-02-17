@@ -17,7 +17,6 @@ import {
   faPencil,
   faArrowRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons'
-
 import NewLoading from '@src/components/NewLoading'
 
 const Home = (): JSX.Element => {

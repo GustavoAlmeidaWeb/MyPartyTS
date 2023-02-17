@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { RootState } from '@src/store/store'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { IPageParams, IServiceDataForm, IServiceDeleteData, ServiceInitialInterface } from '@src/interfaces/IService'
-import serviceService from '@src/services/serviceService'
+import { IPageParams, IServiceDeleteData, ServiceInitialInterface } from '@src/interfaces/IService'
 import { invalidToken } from '@src/utils/helpers'
+import serviceService from '@src/services/serviceService'
 
 const initialState = {
   service: {},
