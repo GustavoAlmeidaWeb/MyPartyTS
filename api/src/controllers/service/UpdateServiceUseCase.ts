@@ -1,3 +1,5 @@
+import { deleteImageDirectory } from '@helpers/delete-image-directory'
+import { imageUrlGenerate } from '@helpers/image-url-generate'
 import { IUpdateService } from '@interfaces/service/IService'
 import { ServiceModel } from '@models/Service/Service'
 
@@ -23,7 +25,12 @@ export const updateServiceUseCase = async ({
   service.description = description
   service.price = price
 
-  image && (service.image = image)
+  if (image) {
+    if (service.image) {
+      await deleteImageDirectory(imageUrlGenerate(`/services/${service.image}`))
+    }
+    service.image = image
+  }
 
   try {
     if (!service.user_id.equals(user_id)) {

@@ -1,6 +1,8 @@
+import { compare, hash } from 'bcryptjs'
 import { IUpdateUser } from '@interfaces/users/IUsers'
 import { UserModel } from '@models/User/User'
-import { compare, hash } from 'bcryptjs'
+import { imageUrlGenerate } from '@helpers/image-url-generate'
+import { deleteImageDirectory } from '@helpers/delete-image-directory'
 
 type ResponseType = {
   status: number
@@ -29,6 +31,9 @@ export const updateUseCase = async ({
   user.phone = phone
 
   if (image) {
+    if (user.image) {
+      await deleteImageDirectory(imageUrlGenerate(`/users/${user.image}`))
+    }
     user.image = image
   }
 

@@ -1,6 +1,8 @@
-import { checkPartyBudget } from '@helpers/check-party-budget'
-import { IUpdateParty } from '@interfaces/party/IParty'
 import { PartyModel } from '@models/Party/Party'
+import { IUpdateParty } from '@interfaces/party/IParty'
+import { checkPartyBudget } from '@helpers/check-party-budget'
+import { deleteImageDirectory } from '@helpers/delete-image-directory'
+import { imageUrlGenerate } from '@helpers/image-url-generate'
 
 type ResponseType = {
   status: number
@@ -42,6 +44,9 @@ export const updatePartyUseCase = async ({
   }
 
   if (image) {
+    if (party.image) {
+      await deleteImageDirectory(imageUrlGenerate(`/parties/${party.image}`))
+    }
     party.image = image
   }
 
