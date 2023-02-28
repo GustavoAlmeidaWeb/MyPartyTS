@@ -23,6 +23,7 @@ export const updatePartyUseCase = async ({
   user_id,
   id,
 }: IUpdateParty): Promise<ResponseType> => {
+  let oldImage: string = null
   const party = await PartyModel.findById(id)
 
   if (!party) {
@@ -45,7 +46,7 @@ export const updatePartyUseCase = async ({
 
   if (image) {
     if (party.image) {
-      await deleteImageDirectory(imageUrlGenerate(`/parties/${party.image}`))
+      oldImage = party.image
     }
     party.image = image
   }
@@ -57,6 +58,7 @@ export const updatePartyUseCase = async ({
   party.services = services
 
   await party.save()
+  await deleteImageDirectory(imageUrlGenerate(`/parties/${oldImage}`))
 
   return { status: 200, json: party }
 }

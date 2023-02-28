@@ -1,3 +1,5 @@
+import { deleteImageDirectory } from '@helpers/delete-image-directory'
+import { imageUrlGenerate } from '@helpers/image-url-generate'
 import { ServiceModel } from '@models/Service/Service'
 import { Types } from 'mongoose'
 
@@ -32,6 +34,7 @@ export const deleteServiceUseCase = async (
       }
     }
 
+    await deleteImageDirectory(imageUrlGenerate(`/services/${service.image}`))
     await service.delete()
 
     return { status: 200, json: { message: 'Serviço excluído com sucesso.' } }

@@ -21,6 +21,7 @@ export const updateUseCase = async ({
   newpassword,
   image = null,
 }: IUpdateUser): Promise<ResponseType> => {
+  let oldImage: string = null
   const user = await UserModel.findById(_id)
 
   if (!user) {
@@ -32,7 +33,7 @@ export const updateUseCase = async ({
 
   if (image) {
     if (user.image) {
-      await deleteImageDirectory(imageUrlGenerate(`/users/${user.image}`))
+      oldImage = user.image
     }
     user.image = image
   }
@@ -51,6 +52,7 @@ export const updateUseCase = async ({
   }
 
   await user.save()
+  await deleteImageDirectory(imageUrlGenerate(`/users/${oldImage}`))
 
   return { status: 200, json: user }
 }

@@ -1,3 +1,5 @@
+import { deleteImageDirectory } from '@helpers/delete-image-directory'
+import { imageUrlGenerate } from '@helpers/image-url-generate'
 import { IDeleteParty } from '@interfaces/party/IParty'
 import { PartyModel } from '@models/Party/Party'
 
@@ -29,6 +31,7 @@ export const deletePartyUseCase = async ({
       }
     }
 
+    await deleteImageDirectory(imageUrlGenerate(`/parties/${party.image}`))
     await PartyModel.findByIdAndDelete(id)
 
     return { status: 200, json: { message: 'Festa excluída com sucesso.' } }

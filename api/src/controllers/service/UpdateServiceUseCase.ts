@@ -20,6 +20,7 @@ export const updateServiceUseCase = async ({
   image,
   user_id,
 }: IUpdateService): Promise<ResponseType> => {
+  let oldImage: string = null
   const service = await ServiceModel.findById(id)
   service.name = name
   service.description = description
@@ -27,7 +28,7 @@ export const updateServiceUseCase = async ({
 
   if (image) {
     if (service.image) {
-      await deleteImageDirectory(imageUrlGenerate(`/services/${service.image}`))
+      oldImage = service.image
     }
     service.image = image
   }
@@ -43,6 +44,8 @@ export const updateServiceUseCase = async ({
     }
 
     await service.save()
+    await deleteImageDirectory(imageUrlGenerate(`/services/${oldImage}`))
+
     return { status: 200, json: service }
   } catch (e) {
     return {
