@@ -52,7 +52,10 @@ export const updateUseCase = async ({
   }
 
   await user.save()
-  await deleteImageDirectory(imageUrlGenerate(`/users/${oldImage}`))
+
+  if (oldImage) {
+    await deleteImageDirectory(imageUrlGenerate(`/users/${oldImage}`))
+  }
 
   return { status: 200, json: user }
 }

@@ -7,6 +7,8 @@ import { ThunkDispatch } from 'redux-thunk'
 import { Button, Form, Col } from 'react-bootstrap'
 import { useResetServiceStates } from '@src/hooks/useResetStates'
 import { IPageParams, IServiceCreate, IServiceDataForm } from '@src/interfaces/IService'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import AddService from '../AddService/AddService'
 import PaginationComponent from '@src/components/PaginationComponent'
 import ListServiceItem from './ListServiceItem'
@@ -118,13 +120,14 @@ const ListServices = (): JSX.Element => {
         serviceId={serviceId}
       />
       <Col className="d-flex justify-content-between align-items-center">
-        <h2 className="display-6">Seus serviços</h2>
+        <h2 className="display-6">Seus fornecedores</h2>
         <Button variant="primary" onClick={handleAddService}>
-          Adicionar Serviço
+          <FontAwesomeIcon icon={faPlus} className="me-2" />
+          Novo Fornecedor
         </Button>
       </Col>
       <Col className="d-flex justify-content-between align-items-center my-3">
-        <p>Abaixo os serviços que você já cadastrou.</p>
+        <p>Abaixo os fornecedores que você já cadastrou.</p>
         <Form.Select className="w-25" onChange={handleLimit}>
           <option value="10">Itens por página</option>
           <option value="20">20 Itens</option>
@@ -142,13 +145,13 @@ const ListServices = (): JSX.Element => {
         </Col>
       ) : (
         <Col className="my-5">
-          <h3 className="text-center">Nenhum serviço cadastrado ainda, adicione um serviço.</h3>
+          <h3 className="h4 text-center text-secondary">Nenhum fornecedor cadastrado ainda, adicione um serviço.</h3>
         </Col>
       )}
       <Col className="d-flex justify-content-between align-items-center">
         {services && (
           <p className="text-muted">
-            Total de serviços cadastrados: <strong>{services.total}</strong>
+            Total de fornecedores cadastrados: <strong>{services.total}</strong>
           </p>
         )}
         <PaginationComponent pages={calc} activePagination={activePagination} handlePage={handlePage} />

@@ -1,9 +1,0 @@
-.btn-show-password,
-.btn-show-password-confirm {
-  right: 0;
-  top: 10px;
-}
-.btn-show-password:active,
-.btn-show-password-confirm:active {
-  border-color: transparent !important;
-}

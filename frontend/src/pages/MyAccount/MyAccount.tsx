@@ -25,6 +25,7 @@ const MyAccount = (): JSX.Element => {
   const [email, setEmail] = useState<string>('')
   const [phone, setPhone] = useState<string>('')
   const [img, setImg] = useState<string>('')
+  const [imageError, setImageError] = useState<string>(null)
   const [previewImage, setPreviewImage] = useState<File | Blob | MediaSource>()
   const [changePass, setChangePass] = useState<boolean>(false)
   const [currentPass, setCurrentPass] = useState<string>('')
@@ -50,7 +51,16 @@ const MyAccount = (): JSX.Element => {
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     // Image preview
     const img: File | Blob | MediaSource = e.target.files[0]
-    setPreviewImage(img)
+
+    if (img.size > 3000000) {
+      setImageError('O tamanho de imagem máximo permitido é de 3MB.')
+      setPreviewImage(null)
+      setTimeout(() => {
+        setImageError(null)
+      }, 3500)
+    } else {
+      setPreviewImage(img)
+    }
   }
 
   // Password change event
@@ -126,6 +136,7 @@ const MyAccount = (): JSX.Element => {
             <Form.Label>Trocar imagem de perfil</Form.Label>
             <Form.Control type="file" onChange={handleFile} />
           </Form.Group>
+          {imageError && <Message type="danger" msg={imageError} />}
           <FloatingLabel controlId="floatingInput" label="Nome" className="mb-3 text-dark">
             <Form.Control type="text" placeholder="Nome" onChange={e => setName(e.target.value)} value={name || ''} />
           </FloatingLabel>

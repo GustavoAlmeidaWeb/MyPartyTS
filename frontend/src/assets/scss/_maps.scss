@@ -1,0 +1,7 @@
+// Colors Map
+$custom-colors: (
+  "party": $party
+);
+
+// Merge the maps
+$theme-colors: map-merge($theme-colors, $custom-colors);

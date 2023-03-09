@@ -2,9 +2,9 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { uploads } from '@src/utils/config'
 import { RootState } from '@src/store/store'
-import { Modal, Button, Form, Col, Table } from 'react-bootstrap'
+import { Modal, Button, Form, Col, Table, Alert } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faXmark, faTriangleExclamation, faArrowPointer } from '@fortawesome/free-solid-svg-icons'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from '@reduxjs/toolkit'
 import { getAllServices } from '@src/slices/serviceSlice'
@@ -12,6 +12,7 @@ import { IPartyCreate } from '@src/interfaces/IParty'
 import { IServiceCreate } from '@src/interfaces/IService'
 import { formatMoney } from '@src/utils/helpers'
 import Message from '@src/components/Message'
+import { Link } from 'react-router-dom'
 
 type Props = {
   show: boolean
@@ -21,12 +22,13 @@ type Props = {
 }
 
 const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
-  const { error } = useSelector((state: RootState) => state.party)
+  const { error, success } = useSelector((state: RootState) => state.party)
   const { services } = useSelector((state: RootState) => state.service)
-  const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
+  // const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
 
   const [imagePreview, setImagePreview] = useState<File | Blob | MediaSource>()
   const [image, setImage] = useState<string>('')
+  const [imageError, setImageError] = useState<string>(null)
   const [title, setTitle] = useState<string>('')
   const [budget, setBudget] = useState<number>()
   const [description, setDescription] = useState<string>('')
@@ -37,8 +39,11 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
   const [partyServices, setPartyServices] = useState<any>([])
 
   useEffect(() => {
-    dispatch(getAllServices({ limit: 50, page: 1 }))
-  }, [dispatch])
+    cleanInputs()
+  }, [success])
+  // useEffect(() => {
+  //   dispatch(getAllServices({ limit: 50, page: 1 }))
+  // }, [dispatch])
 
   useEffect(() => {
     if (services.data) {
@@ -64,8 +69,27 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
     handleSubmit(partyData, partyServices)
   }
 
+  const cleanInputs = (): void => {
+    setTitle('')
+    setDescription('')
+    setAuthor('')
+    setEventDate('')
+    setEventHour('')
+    setBudget(0)
+    setImagePreview(null)
+    setPartyServices([])
+  }
+
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
-    setImagePreview(e.target.files[0])
+    if (e.target.files[0].size > 3000000) {
+      setImageError('O tamanho de imagem máximo permitido é de 3MB.')
+      setImagePreview(null)
+      setTimeout(() => {
+        setImageError(null)
+      }, 3500)
+    } else {
+      setImagePreview(e.target.files[0])
+    }
   }
 
   const handleServices = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -118,6 +142,7 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
             <Form.Label>Imagem da Festa</Form.Label>
             <Form.Control type="file" onChange={handleFile} />
           </Form.Group>
+          {imageError && <Message type="danger" msg={imageError} />}
           <Form.Group className="mb-3">
             <Form.Label>Título da festa</Form.Label>
             <Form.Control type="text" value={title || ''} onChange={e => setTitle(e.target.value)} />
@@ -134,7 +159,7 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
             <Form.Label>Budget da Festa</Form.Label>
             <Form.Control type="number" value={budget || ''} onChange={e => setBudget(Number(e.target.value))} />
           </Form.Group>
-          {services && services.data && services.data.length > 0 && (
+          {services && services.data && services.data.length > 0 ? (
             <Table striped hover size="sm">
               <thead>
                 <tr>
@@ -171,6 +196,21 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
                 ))}
               </tbody>
             </Table>
+          ) : (
+            <Col>
+              <Alert variant="warning">
+                <Alert.Heading className="h5">
+                  <FontAwesomeIcon className="me-2" icon={faTriangleExclamation} />
+                  Atenção, nenhum fornecedor cadastrado.
+                </Alert.Heading>
+                <p>Para que o cadastro da festa seja realizado com sucesso, é necessário que serviços sejam cadastrados antes.</p>
+                <hr />
+                <Link to="/servicos" className="text-decoration-none alert-link">
+                  Clique aqui
+                  <FontAwesomeIcon className="ms-2" icon={faArrowPointer} />
+                </Link>
+              </Alert>
+            </Col>
           )}
           <Form.Group className="mb-3">
             <Form.Label>Data do Evento</Form.Label>

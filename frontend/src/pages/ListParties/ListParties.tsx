@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@src/store/store'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from '@reduxjs/toolkit'
-import { createParty, getAllParties } from '@src/slices/partySlice'
+import { createParty, deleteParty, getAllParties } from '@src/slices/partySlice'
 import { IPageParams } from '@src/interfaces/IService'
 import { IPartyCreate } from '@src/interfaces/IParty'
 import { useResetPartyStates } from '@src/hooks/useResetStates'
-import { Button, Col } from 'react-bootstrap'
+import { Button, Col, Form } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import PaginationComponent from '@src/components/PaginationComponent'
 import AddParty from '../AddParty/AddParty'
 import Message from '@src/components/Message'
@@ -61,8 +63,19 @@ const ListParties = (): JSX.Element => {
     setEditParty(false)
   }
 
-  const handleDelete = (id: string) => {}
+  const handleDelete = async (id: string): Promise<void> => {
+    await dispatch(deleteParty(id))
+    dispatch(getAllParties(limitPage))
+    resetStates()
+  }
+
   const handleEdit = (id: string) => {}
+
+  const handleLimit = (e: ChangeEvent<HTMLSelectElement>): void => {
+    setLimit(Number(e.target.value))
+    setActivePagination(1)
+    setPage(1)
+  }
 
   const handleSubmit = async (data: IPartyCreate | any, service: any): Promise<void> => {
     const formData: FormData = new FormData()
@@ -76,12 +89,22 @@ const ListParties = (): JSX.Element => {
     <>
       <NewLoading load={loading} />
       <AddParty editParty={editParty} show={showModal} hide={handleClose} handleSubmit={handleSubmit} />
-      <div>
+      <Col className="d-flex justify-content-between align-items-center">
         <h2 className="display-6">Minhas Festas</h2>
         <Button variant="primary" onClick={() => setShowModal(true)}>
-          Adicionar nova festa
+          <FontAwesomeIcon icon={faPlus} className="me-2" />
+          Nova festa
         </Button>
-      </div>
+      </Col>
+      <Col className="d-flex justify-content-between align-items-center my-3">
+        <p>Abaixo as festas que você já cadastrou.</p>
+        <Form.Select className="w-25" onChange={handleLimit}>
+          <option value="10">Itens por página</option>
+          <option value="20">20 Itens</option>
+          <option value="15">15 Itens</option>
+          <option value="10">10 Itens</option>
+        </Form.Select>
+      </Col>
       {message && <Message msg={message} type="success" />}
       {parties && parties.data && parties.data.length > 0 ? (
         <Col as="ul" className="ps-0">
@@ -90,7 +113,9 @@ const ListParties = (): JSX.Element => {
           ))}
         </Col>
       ) : (
-        <h3>Nenhuma festa cadastrada.</h3>
+        <Col className="my-5">
+          <h3 className="h4 text-center text-secondary">Nenhuma festa cadastrada.</h3>
+        </Col>
       )}
       <Col className="d-flex justify-content-between align-items-center">
         {parties && (

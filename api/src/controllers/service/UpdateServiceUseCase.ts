@@ -44,7 +44,10 @@ export const updateServiceUseCase = async ({
     }
 
     await service.save()
-    await deleteImageDirectory(imageUrlGenerate(`/services/${oldImage}`))
+
+    if (oldImage) {
+      await deleteImageDirectory(imageUrlGenerate(`/services/${oldImage}`))
+    }
 
     return { status: 200, json: service }
   } catch (e) {

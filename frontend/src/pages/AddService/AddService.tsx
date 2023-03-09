@@ -9,7 +9,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { getService } from '@src/slices/serviceSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareCheck } from '@fortawesome/free-regular-svg-icons'
-import { faFileCirclePlus, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faFileCirclePlus, faXmark, faPlus, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import Message from '@src/components/Message'
 
 type Props = {
@@ -28,6 +28,7 @@ const AddService = ({ show, hide, handleSubmit, handleUpdate, edit, serviceId }:
   const [name, setName] = useState<string>('')
   const [price, setPrice] = useState<string>('')
   const [image, setImage] = useState<string>('')
+  const [imageError, setImageError] = useState<string>(null)
   const [description, setDescription] = useState<string>('')
   const [imagePreview, setImagePreview] = useState<File | Blob | MediaSource>()
 
@@ -61,7 +62,16 @@ const AddService = ({ show, hide, handleSubmit, handleUpdate, edit, serviceId }:
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     const img: File | Blob | MediaSource = e.target.files[0]
-    setImagePreview(img)
+
+    if (img.size > 3000000) {
+      setImageError('O tamanho máximo de imagem permitido é 3MB.')
+      setImagePreview(null)
+      setTimeout(() => {
+        setImageError(null)
+      }, 3500)
+    } else {
+      setImagePreview(img)
+    }
   }
 
   const handleData = (e: FormEvent<HTMLFormElement>): void => {
@@ -88,7 +98,19 @@ const AddService = ({ show, hide, handleSubmit, handleUpdate, edit, serviceId }:
   return (
     <Modal show={show} onHide={hide} dialogClassName="modal-70w">
       <Modal.Header closeButton>
-        <Modal.Title as="h3">{!edit ? 'Adicionar Serviço' : 'Atualizar Serviço'}</Modal.Title>
+        <Modal.Title as="h3">
+          {!edit ? (
+            <>
+              <FontAwesomeIcon icon={faPlus} className="me-2" />
+              Adicionar Fornecedor
+            </>
+          ) : (
+            <>
+              <FontAwesomeIcon icon={faPencilAlt} className="me-2" />
+              Atualizar Fornecedor
+            </>
+          )}
+        </Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleData}>
         <Modal.Body>
@@ -122,6 +144,7 @@ const AddService = ({ show, hide, handleSubmit, handleUpdate, edit, serviceId }:
             <Form.Label>Imagem do serviço</Form.Label>
             <Form.Control type="file" onChange={handleFile} />
           </Form.Group>
+          {imageError && <Message type="danger" msg={imageError} />}
           <Form.Group className="mb-3">
             <Form.Label>Nome do serviço</Form.Label>
             <Form.Control type="text" value={name || ''} onChange={e => setName(e.target.value)} />

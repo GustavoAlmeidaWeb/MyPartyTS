@@ -1,4 +1,3 @@
-import '@src/assets/css/style.css'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import { useAuth } from '@src/hooks/useAuth'

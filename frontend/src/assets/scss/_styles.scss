@@ -33,3 +33,25 @@
 .w-100-px {
   width: 100px;
 }
+
+.btn-show-password {
+  &-confirm {
+    right: 0;
+    top: 10px;
+  }
+
+  right: 0;
+  top: 10px;
+}
+
+.btn-show-password {
+  &-confirm {
+    &:active {
+      border-color: transparent !important;
+    }
+  }
+
+  &:active {
+    border-color: transparent !important;
+  }
+}

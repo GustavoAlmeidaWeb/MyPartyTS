@@ -1,4 +1,3 @@
-import '@src/assets/css/login.css'
 import { Link } from 'react-router-dom'
 import { FormEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'

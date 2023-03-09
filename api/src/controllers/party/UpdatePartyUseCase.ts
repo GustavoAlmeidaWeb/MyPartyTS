@@ -58,7 +58,9 @@ export const updatePartyUseCase = async ({
   party.services = services
 
   await party.save()
-  await deleteImageDirectory(imageUrlGenerate(`/parties/${oldImage}`))
+  if (oldImage) {
+    await deleteImageDirectory(imageUrlGenerate(`/parties/${oldImage}`))
+  }
 
   return { status: 200, json: party }
 }
