@@ -1,18 +1,15 @@
+import { Link } from 'react-router-dom'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { uploads } from '@src/utils/config'
 import { RootState } from '@src/store/store'
 import { Modal, Button, Form, Col, Table, Alert } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faTriangleExclamation, faArrowPointer } from '@fortawesome/free-solid-svg-icons'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from '@reduxjs/toolkit'
-import { getAllServices } from '@src/slices/serviceSlice'
 import { IPartyCreate } from '@src/interfaces/IParty'
 import { IServiceCreate } from '@src/interfaces/IService'
 import { formatMoney } from '@src/utils/helpers'
 import Message from '@src/components/Message'
-import { Link } from 'react-router-dom'
 
 type Props = {
   show: boolean
@@ -24,7 +21,6 @@ type Props = {
 const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
   const { error, success } = useSelector((state: RootState) => state.party)
   const { services } = useSelector((state: RootState) => state.service)
-  // const dispatch = useDispatch<ThunkDispatch<void, RootState, AnyAction>>()
 
   const [imagePreview, setImagePreview] = useState<File | Blob | MediaSource>()
   const [image, setImage] = useState<string>('')
@@ -41,9 +37,6 @@ const AddParty = ({ show, hide, editParty, handleSubmit }: Props) => {
   useEffect(() => {
     cleanInputs()
   }, [success])
-  // useEffect(() => {
-  //   dispatch(getAllServices({ limit: 50, page: 1 }))
-  // }, [dispatch])
 
   useEffect(() => {
     if (services.data) {

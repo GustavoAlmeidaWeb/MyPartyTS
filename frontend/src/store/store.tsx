@@ -6,6 +6,7 @@ import authReducer from '@src/slices/authSlice'
 import userReducer from '@src/slices/userSlice'
 import serviceReducer from '@src/slices/serviceSlice'
 import partyReducer from '@src/slices/partySlice'
+import addressReducer from '@src/slices/addressSlice'
 
 export const store: Store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store: Store = configureStore({
     user: userReducer,
     service: serviceReducer,
     party: partyReducer,
+    address: addressReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

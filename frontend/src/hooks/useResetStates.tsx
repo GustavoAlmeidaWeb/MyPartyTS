@@ -4,6 +4,7 @@ import { resetUserStates } from '@src/slices/userSlice'
 import { resetServiceStates } from '@src/slices/serviceSlice'
 import { resetPartyStates } from '@src/slices/partySlice'
 import { AppDispatch } from '@src/store/store'
+import { resetAddressStates } from '@src/slices/addressSlice'
 
 export const useResetAuthStates = (dispatch: AppDispatch) => {
   return (): void => {
@@ -33,6 +34,14 @@ export const useResetPartyStates = (dispatch: AppDispatch) => {
   return (): void => {
     setTimeout(() => {
       dispatch(resetPartyStates())
+    }, 3000)
+  }
+}
+
+export const useResetAddressStates = (dispatch: AppDispatch) => {
+  return (): void => {
+    setTimeout(() => {
+      dispatch(resetAddressStates())
     }, 3000)
   }
 }

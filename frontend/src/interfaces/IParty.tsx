@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios'
 import { IServiceCreate } from './IService'
 
 export interface IPartyCreate {
