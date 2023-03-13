@@ -12,9 +12,9 @@ import {
   faRightFromBracket,
   faFileCirclePlus,
   faUser,
-  faGear,
   faChampagneGlasses,
   faLocationDot,
+  faBriefcase,
 } from '@fortawesome/free-solid-svg-icons'
 
 type Props = {
@@ -51,10 +51,10 @@ const Navigation = ({ auth }: Props): JSX.Element => {
             ) : (
               <>
                 <NavLink className="nav-link" to="/festas">
-                  <FontAwesomeIcon icon={faChampagneGlasses} /> Minhas Festas
+                  <FontAwesomeIcon icon={faChampagneGlasses} /> Festas
                 </NavLink>
                 <NavLink className="nav-link" to="/servicos">
-                  <FontAwesomeIcon icon={faGear} /> Fornecedores
+                  <FontAwesomeIcon icon={faBriefcase} /> Fornecedores
                 </NavLink>
                 <NavLink className="nav-link" to="/enderecos">
                   <FontAwesomeIcon icon={faLocationDot} /> Endereços

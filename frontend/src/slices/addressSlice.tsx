@@ -66,6 +66,19 @@ export const getAllAddresses = createAsyncThunk('address/getAll', async (params:
   }
 })
 
+// Get info by CEP
+export const getInfoByCep = createAsyncThunk('address/cep', async (cep: string, thunkAPI) => {
+  try {
+    const res = await addressServices.getAddressByCep(cep)
+    return res
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      // Check for errors
+      return thunkAPI.rejectWithValue(e.response.data.message)
+    }
+  }
+})
+
 export const addressSlice = createSlice({
   name: 'address',
   initialState,
@@ -125,6 +138,20 @@ export const addressSlice = createSlice({
         state.loading = false
         state.error = action.payload
         state.addresses = {}
+      })
+      .addCase(getInfoByCep.pending, state => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(getInfoByCep.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = null
+        state.address = action.payload
+      })
+      .addCase(getInfoByCep.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+        state.address = {}
       })
   },
 })
