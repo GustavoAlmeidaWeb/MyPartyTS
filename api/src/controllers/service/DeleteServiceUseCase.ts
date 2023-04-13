@@ -34,10 +34,13 @@ export const deleteServiceUseCase = async (
       }
     }
 
-    await deleteImageDirectory(imageUrlGenerate(`/services/${service.image}`))
+    if (service.image) {
+      await deleteImageDirectory(imageUrlGenerate(`/services/${service.image}`))
+    }
+
     await service.delete()
 
-    return { status: 200, json: { message: 'Serviço excluído com sucesso.' } }
+    return { status: 204, json: { message: 'Serviço excluído com sucesso.' } }
   } catch (e) {
     return {
       status: 422,

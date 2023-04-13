@@ -4,10 +4,11 @@ export interface ICreateUser {
   name: string
   email: string
   phone: string
-  password: string
+  password?: string
   image?: string
   token?: string
   _doc?: any
+  _id?: Types.ObjectId
 }
 
 export interface IUpdateUser {

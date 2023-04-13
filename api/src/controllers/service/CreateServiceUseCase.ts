@@ -19,7 +19,7 @@ export const createServiceUseCase = async ({
 }: ICreateService): Promise<ResponseType> => {
   const data = <ICreateService>{ name, description, price, user_id }
 
-  image ? (data.image = image) : (data.image = null)
+  data.image = image || null
 
   try {
     const service = await ServiceModel.create(data)

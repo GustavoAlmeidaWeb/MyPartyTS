@@ -36,7 +36,13 @@ export const registerUseCase = async ({
     })
     return {
       status: 201,
-      json: { ...user._doc, token: generateToken(user._id) },
+      json: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        token: generateToken(user._id),
+      },
     }
   } catch (error) {
     return {

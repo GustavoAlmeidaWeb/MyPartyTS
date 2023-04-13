@@ -31,7 +31,9 @@ export const deletePartyUseCase = async ({
       }
     }
 
-    await deleteImageDirectory(imageUrlGenerate(`/parties/${party.image}`))
+    if (party.image) {
+      await deleteImageDirectory(imageUrlGenerate(`/parties/${party.image}`))
+    }
     await PartyModel.findByIdAndDelete(id)
 
     return { status: 200, json: { message: 'Festa excluída com sucesso.' } }

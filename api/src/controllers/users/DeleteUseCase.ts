@@ -33,9 +33,12 @@ export const deleteUseCase = async (
   }
 
   try {
-    await deleteImageDirectory(imageUrlGenerate(`/users/${user.image}`))
+    if (user.image) {
+      await deleteImageDirectory(imageUrlGenerate(`/users/${user.image}`))
+    }
+
     await UserModel.findByIdAndDelete(user._id)
-    return { status: 200, json: { message: 'Conta excluída com sucesso.' } }
+    return { status: 204, json: { message: 'Conta excluída com sucesso.' } }
   } catch (error) {
     return {
       status: 422,
