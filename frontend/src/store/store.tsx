@@ -1,6 +1,8 @@
+import { api } from '@src/utils/config'
 import { Store } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
 import thunkMiddleware from 'redux-thunk'
+import axiosMiddleware from 'redux-axios-middleware'
 
 import authReducer from '@src/slices/authSlice'
 import userReducer from '@src/slices/userSlice'
@@ -19,7 +21,9 @@ export const store: Store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(thunkMiddleware),
+    })
+      .concat(thunkMiddleware)
+      .concat(axiosMiddleware(api)),
 })
 
 export type RootState = ReturnType<typeof store.getState>

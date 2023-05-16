@@ -16,13 +16,13 @@ const initialState = {
 // Get current user
 export const getUser = createAsyncThunk('user/get', async (_, thunkAPI) => {
   try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await userService.getUser(auth.user.data.token)
+    // const { auth }: RootState = thunkAPI.getState()
+    const res = await userService.getUser()
     return res
   } catch (e) {
     if (axios.isAxiosError(e)) {
       // Check if is invalid token
-      invalidToken(e)
+      // invalidToken(e)
 
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
@@ -33,13 +33,13 @@ export const getUser = createAsyncThunk('user/get', async (_, thunkAPI) => {
 // Update user
 export const updateUser = createAsyncThunk('user/update', async (userData: FormData, thunkAPI) => {
   try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await userService.updateUser(auth.user.data.token, userData)
+    // const { auth }: RootState = thunkAPI.getState()
+    const res = await userService.updateUser(userData)
     return res
   } catch (e) {
     if (axios.isAxiosError(e)) {
       // Check if is invalid token
-      invalidToken(e)
+      // invalidToken(e)
 
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
@@ -50,13 +50,13 @@ export const updateUser = createAsyncThunk('user/update', async (userData: FormD
 // Delete user
 export const deleteUser = createAsyncThunk('user/delete', async (_, thunkAPI) => {
   try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await userService.deleteUser(auth.user.data.token)
+    // const { auth }: RootState = thunkAPI.getState()
+    const res = await userService.deleteUser()
     return res
   } catch (e) {
     if (axios.isAxiosError(e)) {
       // Check if is invalid token
-      invalidToken(e)
+      // invalidToken(e)
 
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])

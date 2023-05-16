@@ -1,23 +1,17 @@
 import { IUserRegister } from '../interfaces/IUser'
-import { api, setTokenHeaders } from '../utils/config'
+import { api } from '../utils/config'
 
-const getUser = async (token: string): Promise<IUserRegister> => {
-  setTokenHeaders(token)
+const getUser = async (): Promise<IUserRegister> => {
   const res: IUserRegister = await api.get('/users')
   return res
 }
 
-const updateUser = async (
-  token: string,
-  updateUser: FormData,
-): Promise<IUserRegister> => {
-  setTokenHeaders(token)
+const updateUser = async (updateUser: FormData): Promise<IUserRegister> => {
   const res: IUserRegister = await api.put('/users/update', updateUser)
   return res
 }
 
-const deleteUser = async (token: string): Promise<void> => {
-  setTokenHeaders(token)
+const deleteUser = async (): Promise<void> => {
   await api.delete('/users/delete')
 }
 

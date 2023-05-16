@@ -15,4 +15,9 @@ const invalidToken = (err: AxiosError<any, any>): void => {
   }
 }
 
-export { formatMoney, formatDate, invalidToken }
+const getTokenFromLocalStorage = (): string => {
+  const { token } = JSON.parse(localStorage.getItem('myparty'))
+  return token || null
+}
+
+export { formatMoney, formatDate, invalidToken, getTokenFromLocalStorage }

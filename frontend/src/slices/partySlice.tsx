@@ -18,13 +18,12 @@ const initialState = {
 // Get a party
 export const getParty = createAsyncThunk('party/get', async (id: string, thunkAPI) => {
   try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await partyService.getParty(id, auth.user.data.token)
+    const res = await partyService.getParty(id)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
       // Check if is invalid token
-      invalidToken(e)
+      // invalidToken(e)
 
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
@@ -35,14 +34,14 @@ export const getParty = createAsyncThunk('party/get', async (id: string, thunkAP
 // Get all parties
 export const getAllParties = createAsyncThunk('party/getAll', async (params: IPageParams, thunkAPI) => {
   try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await partyService.getAllParties(auth.user.data.token, params)
+    // const { auth }: RootState = thunkAPI.getState()
+    const res = await partyService.getAllParties(params)
     console.log(res.data)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
       // Check if is invalid token
-      invalidToken(e)
+      // invalidToken(e)
 
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
@@ -53,13 +52,12 @@ export const getAllParties = createAsyncThunk('party/getAll', async (params: IPa
 // Get all parties
 export const createParty = createAsyncThunk('party/create', async (partyData: FormData, thunkAPI) => {
   try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await partyService.createParty(partyData, auth.user.data.token)
+    const res = await partyService.createParty(partyData)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
       // Check if is invalid token
-      invalidToken(e)
+      // invalidToken(e)
 
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
@@ -70,13 +68,12 @@ export const createParty = createAsyncThunk('party/create', async (partyData: Fo
 // Get a party
 export const deleteParty = createAsyncThunk('party/delete', async (id: string, thunkAPI) => {
   try {
-    const { auth }: RootState = thunkAPI.getState()
-    const res = await partyService.deleteParty(id, auth.user.data.token)
+    const res = await partyService.deleteParty(id)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
       // Check if is invalid token
-      invalidToken(e)
+      // invalidToken(e)
 
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])

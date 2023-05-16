@@ -12,10 +12,17 @@ export const authGuard = async (
 
   if (!token) return res.status(401).json({ errors: ['ACCESS_DENIED'] })
 
-  const verified = <string | JwtPayload>jwt.verify(token, process.env.JWT_TOKEN)
-  req.user = await UserModel.findOne({ _id: verified['id'] })
+  try {
+    const verified = <string | JwtPayload>(
+      jwt.verify(token, process.env.JWT_TOKEN)
+    )
 
-  if (!req.user) return res.status(401).json({ errors: ['INVALID_TOKEN'] })
+    req.user = await UserModel.findOne({ _id: verified['id'] })
 
-  next()
+    if (!req.user) return res.status(400).json({ errors: ['INVALID_TOKEN'] })
+
+    next()
+  } catch (error) {
+    res.status(400).json({ errors: ['INVALID_TOKEN'] })
+  }
 }
