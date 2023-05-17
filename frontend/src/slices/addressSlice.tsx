@@ -1,9 +1,7 @@
 import axios from 'axios'
 import { IPageParams } from '@src/interfaces/IService'
-import { RootState } from '@src/store/store'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AddressInitialInterface, IAddressCreate } from '@src/interfaces/IAddress'
-import { invalidToken } from '@src/utils/helpers'
 import addressServices from '@src/services/addressService'
 
 const initialState = {
@@ -18,14 +16,10 @@ const initialState = {
 // Create new address
 export const createAddress = createAsyncThunk('address/create', async (addressData: IAddressCreate, thunkAPI) => {
   try {
-    // const { auth }: RootState = thunkAPI.getState()
     const res = await addressServices.createAddressService(addressData)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // Check if is invalid token
-      // invalidToken(e)
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -35,14 +29,10 @@ export const createAddress = createAsyncThunk('address/create', async (addressDa
 // Get address
 export const getAddress = createAsyncThunk('address/get', async (id: string, thunkAPI) => {
   try {
-    // const { auth }: RootState = thunkAPI.getState()
     const res = await addressServices.findAddressService(id)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // Check if is invalid token
-      // invalidToken(e)
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -52,14 +42,10 @@ export const getAddress = createAsyncThunk('address/get', async (id: string, thu
 // Get all addresses
 export const getAllAddresses = createAsyncThunk('address/getAll', async (params: IPageParams, thunkAPI) => {
   try {
-    // const { auth }: RootState = thunkAPI.getState()
     const res = await addressServices.findAllAddressesService(params)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // Check if is invalid token
-      // invalidToken(e)
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }

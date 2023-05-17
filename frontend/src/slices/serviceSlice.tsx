@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { RootState } from '@src/store/store'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { IPageParams, IServiceDeleteData, ServiceInitialInterface } from '@src/interfaces/IService'
-import { invalidToken } from '@src/utils/helpers'
 import serviceService from '@src/services/serviceService'
 
 const initialState = {
@@ -17,14 +15,10 @@ const initialState = {
 // Get a service
 export const getService = createAsyncThunk('service/get', async (id: string, thunkAPI) => {
   try {
-    // const { auth }: RootState = thunkAPI.getState()
     const res = await serviceService.getService(id)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // Check if is invalid token
-      // invalidToken(e)
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -34,14 +28,10 @@ export const getService = createAsyncThunk('service/get', async (id: string, thu
 // Get all services
 export const getAllServices = createAsyncThunk('service/getAll', async (params: IPageParams, thunkAPI) => {
   try {
-    // const { auth }: RootState = thunkAPI.getState()
     const res = await serviceService.getAllServices(params)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // Check if is invalid token
-      // invalidToken(e)
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -51,14 +41,10 @@ export const getAllServices = createAsyncThunk('service/getAll', async (params: 
 // Create a service
 export const createService = createAsyncThunk('service/create', async (serviceData: FormData, thunkAPI) => {
   try {
-    // const { auth }: RootState = thunkAPI.getState()
     const res = await serviceService.createService(serviceData)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // Check if is invalid token
-      // invalidToken(e)
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -68,14 +54,10 @@ export const createService = createAsyncThunk('service/create', async (serviceDa
 // Create a service
 export const updateService = createAsyncThunk('service/update', async (serviceData: FormData, thunkAPI) => {
   try {
-    // const { auth }: RootState = thunkAPI.getState()
     const res = await serviceService.updateService(serviceData)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // Check if is invalid token
-      // invalidToken(e)
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
@@ -85,14 +67,10 @@ export const updateService = createAsyncThunk('service/update', async (serviceDa
 // Delete service
 export const deleteService = createAsyncThunk('service/delete', async (id: string, thunkAPI) => {
   try {
-    // const { auth }: RootState = thunkAPI.getState()
     const res: IServiceDeleteData = await serviceService.deleteService(id)
     return res.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      // Check if is invalid token
-      // invalidToken(e)
-
       // Check for errors
       return thunkAPI.rejectWithValue(e.response.data.errors[0])
     }
